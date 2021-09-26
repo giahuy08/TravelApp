@@ -1,17 +1,53 @@
 const controller = require('./controller');
 const userServices = require('../services/user.services');
 const { defaultRoles } = require('../config/defineModel');
+const { configEnv } = require('../config/index');
+const nodemailer = require('nodemailer');
 
 exports.registerAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.registerUserAsync(req.value.body);
+		var smtpTransport = nodemailer.createTransport({
+			service: "gmail", //smtp.gmail.com  //in place of service use host...
+			secure: false, //true
+			port: 25, //465
+			auth: {
+				user: configEnv.Email,
+				pass: configEnv.Password
+			},
+			tls: {
+			  rejectUnauthorized: false,
+			},
+		  });
+		  console.log("zo nek 1");
+
+		  const mailOptions = {
+			to: resServices.email,
+			from: configEnv.Email,
+			subject: 'Quên mật khẩu Fresh Food',
+			text: 'Mã OTP của bạn là: ' 
+		};
+		  smtpTransport.sendMail(mailOptions, function (error, response) {
+			if (error) {
+			  res.status(400).send({
+				error: "Gửi không thành công",
+			  });
+			} else {
+			  res.status(200).send({
+				Success: "Đã gửi Email thành công",
+			  });
+			}
+		  });
 		if (!resServices.success)
+		{
+			console.log("zo nek");
 			return controller.sendSuccess(
 				res,
 				resServices.data,
 				300,
 				resServices.message
 			);
+		}
 		return controller.sendSuccess(
 			res,
 			resServices.data,

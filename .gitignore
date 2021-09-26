@@ -165,7 +165,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
+yarn.lock
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db

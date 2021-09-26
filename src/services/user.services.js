@@ -24,6 +24,10 @@ exports.registerUserAsync = async body => {
 			specialChars: false
 		});
 		console.log(otp);
+		
+
+
+	
 		const hashedPassword = await bcrypt.hash(password, 8);
 		const newUser = new USER({
 			email: email,
@@ -41,7 +45,8 @@ exports.registerUserAsync = async body => {
 		return {
 			message: 'Successfully Register',
 			success: true,
-			data: generateToken
+			data: generateToken,
+			email: email
 		};
 	} catch (err) {
 		console.log(err);
@@ -54,6 +59,7 @@ exports.registerUserAsync = async body => {
 
 exports.loginAsync = async body => {
 	try {
+
 		const { email, password } = body;
 		const user = await USER.findOne({
 			email: email
@@ -71,10 +77,13 @@ exports.loginAsync = async body => {
 				success: false
 			};
 		}
+		console.log(user);
 		const generateToken = jwtServices.createToken({
 			id: user._id,
 			role: user.role
 		});
+		console.log(generateToken);
+		
 		return {
 			message: 'Successfully login',
 			success: true,
