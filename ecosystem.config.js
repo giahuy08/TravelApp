@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
       {
-        name: 'FreshFood',
+        name: 'TravelAround',
         script: 'dist/src/server.js',
         args: 'src/server.js',
         instances: 1,

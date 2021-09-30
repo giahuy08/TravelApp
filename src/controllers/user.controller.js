@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 exports.registerAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.registerUserAsync(req.value.body);
-		var smtpTransport = nodemailer.createTransport({
+		var smtpTransport = await nodemailer.createTransport({
 			service: "gmail", //smtp.gmail.com  //in place of service use host...
 			secure: false, //true
 			port: 25, //465
@@ -16,44 +16,33 @@ exports.registerAsync = async (req, res, next) => {
 				pass: configEnv.Password
 			},
 			tls: {
-			  rejectUnauthorized: false,
+				rejectUnauthorized: false,
 			},
-		  });
-		  console.log("zo nek 1");
-
-		  const mailOptions = {
+		});
+		const mailOptions = {
 			to: resServices.email,
 			from: configEnv.Email,
-			subject: 'Quên mật khẩu Fresh Food',
-			text: 'Mã OTP của bạn là: ' 
+			subject: 'Đăng ký tài khoản Travel Around',
+			text: 'Mã OTP của bạn là: ' + resServices.otp
 		};
-		  smtpTransport.sendMail(mailOptions, function (error, response) {
+		smtpTransport.sendMail(mailOptions, function (error, response) {
 			if (error) {
-			  res.status(400).send({
-				error: "Gửi không thành công",
-			  });
+				return controller.sendSuccess(
+					res,
+					resServices.data,
+					300,
+					resServices.message
+				);
 			} else {
-			  res.status(200).send({
-				Success: "Đã gửi Email thành công",
-			  });
+				controller.sendSuccess(
+					res,
+					resServices.data,
+					200,
+					resServices.message
+				);
 			}
-		  });
-		if (!resServices.success)
-		{
-			console.log("zo nek");
-			return controller.sendSuccess(
-				res,
-				resServices.data,
-				300,
-				resServices.message
-			);
-		}
-		return controller.sendSuccess(
-			res,
-			resServices.data,
-			200,
-			resServices.message
-		);
+		});
+	
 	} catch (err) {
 		console.log(err);
 		return controller.sendError(res);
@@ -77,6 +66,7 @@ exports.loginAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
 exports.updateCodeAdminAsync = async (req, res, next) => {
 	try {
 		const code = req.query.code;
@@ -104,7 +94,7 @@ exports.forgotPasswordAsync = async (req, res, next) => {
 	try {
 		const { email } = req.query;
 		console.log(email);
-		const resServices = await userServices.fotgotPassword({email: email});
+		const resServices = await userServices.fotgotPassword({ email: email });
 		if (!resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -144,24 +134,6 @@ exports.resetPasswordAsync = async (req, res, next) => {
 		);
 	} catch (error) {
 		console.log(error);
-		return controller.sendError(res);
-	}
-};
-
-exports.loginAsync = async (req, res, next) => {
-	try {
-		const resServices = await userServices.loginAsync(req.value.body);
-		if (!resServices.success) {
-			return controller.sendSuccess(res, {}, 300, resServices.message);
-		}
-		return controller.sendSuccess(
-			res,
-			resServices.data,
-			200,
-			resServices.message
-		);
-	} catch (err) {
-		console.log(err);
 		return controller.sendError(res);
 	}
 };

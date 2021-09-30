@@ -38,7 +38,8 @@
     "path": "^0.12.7",
     "socket.io": "^2.3.0",
     "uuid-v4": "^0.1.0",
-    "validator": "^13.5.2"
+    "validator": "^13.5.2",
+    "yarn": "^1.22.15"
   },
   "devDependencies": {
     "env-cmd": "^10.1.0",
