@@ -19,15 +19,10 @@ exports.registerUserAsync = async body => {
 				message: 'Email already exists',
 				success: false
 			};
-		var otp = otpGenerator.generate(6, {
+		var otp = await otpGenerator.generate(6, {
 			upperCase: false,
 			specialChars: false
 		});
-		console.log(otp);
-		
-
-
-	
 		const hashedPassword = await bcrypt.hash(password, 8);
 		const newUser = new USER({
 			email: email,
@@ -38,7 +33,7 @@ exports.registerUserAsync = async body => {
 			otp: otp
 		});
 		await newUser.save();
-		const generateToken = jwtServices.createToken({
+		const generateToken = await jwtServices.createToken({
 			id: newUser._id,
 			role: newUser.role
 		});
@@ -46,7 +41,8 @@ exports.registerUserAsync = async body => {
 			message: 'Successfully Register',
 			success: true,
 			data: generateToken,
-			email: email
+			email: email,
+			otp:otp
 		};
 	} catch (err) {
 		console.log(err);
@@ -169,7 +165,7 @@ exports.fotgotPassword = async body => {
 			const mailOptions = {
 				to: result.email,
 				from: configEnv.Email,
-				subject: 'Quên mật khẩu Fresh Food',
+				subject: 'Quên mật khẩu Travel Around',
 				text: 'Mã OTP của bạn là: ' + result.otp
 			};
 			const resultSendMail = await sendMail(mailOptions);

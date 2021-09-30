@@ -25,7 +25,7 @@ app.use(cors())
 
 
 app.use(route)
-app.get('/healCheck', (req, res) => res.status(200).json({hello : 'Welcome to Travel App'}))
+app.get('/healCheck', (req, res) => res.status(200).json({hello : 'Welcome to Travel Around'}))
 app.get('/*', (req, res) => res.send({message: 'cannot access route'}))
 
 

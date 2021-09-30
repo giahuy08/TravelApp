@@ -16,6 +16,12 @@ const defaultRoles = {
   User:0,
   Staff:2
 }
+
+const defaultEnterprises = {
+  hotel: 1,
+  restaurant:0,
+}
+
 const defaultChatSocket={
   sendMessageSSC:"SEND_MESSAGE_SSC",
   sendMessageCSS:"SEND_MESSAGE_CSS", 
@@ -25,5 +31,6 @@ const defaultChatSocket={
 module.exports ={
   defaultModel,
   defaultRoles,
+  defaultEnterprises,
   defaultChatSocket
 }

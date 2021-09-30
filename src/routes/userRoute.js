@@ -23,5 +23,6 @@ router.post('/login', Validate.body(SchemaValidateUser.login), Controller.loginA
 router.post('/register', Validate.body(SchemaValidateUser.register), Controller.registerAsync)
 router.get('/forgotPassword', Controller.forgotPasswordAsync)
 router.post('/resetPassword',Validate.body(SchemaValidateUser.resetPassword), Controller.resetPasswordAsync)
+router.get('/findUserById', Controller.findUserByIdAsync)
 
 module.exports = router
