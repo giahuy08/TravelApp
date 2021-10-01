@@ -13,7 +13,7 @@
 };
 const defaultRoles = {
   Admin: 1,
-  User:0,
+  User: 0,
   Staff:2
 }
 
