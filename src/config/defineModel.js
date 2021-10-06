@@ -10,6 +10,7 @@
   boolean: { type: Boolean, default: true },
   booleanFalse: { type: Boolean, default: false },
   object: { type: Object, default: {} },
+  stringAvatar: {type: String, default: "https://firebasestorage.googleapis.com/v0/b/travel-app-34be2.appspot.com/o/unknown.jpg?alt=media&token=3dbbbcec-60e1-419b-89b8-cedb9d7f0514"},
 };
 const defaultRoles = {
   Admin: 1,

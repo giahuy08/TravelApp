@@ -4,9 +4,7 @@ const schemas = {
 		name: joi.string().required(),
 		type: joi.string().required(),
         vehicleNumber:joi.string().required(),
-		imageVehicle:joi.string().required(),
-	
+		imagesVehicle:joi.array().required(),
 	}),
-
 };
 module.exports = schemas;

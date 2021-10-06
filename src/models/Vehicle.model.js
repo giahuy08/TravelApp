@@ -7,7 +7,7 @@ const Vehicle = new Schema({
     name:defaultModel.stringR,
     type:defaultModel.string,
     vehicleNumber:defaultModel.string,
-    imageVehicle:defaultModel.string,
+    imagesVehicle:defaultModel.array,
    
 }, { timestamps: true })
 

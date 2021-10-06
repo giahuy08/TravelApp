@@ -8,7 +8,7 @@ const Tour = new Schema({
     place:defaultModel.stringR,
     detail:defaultModel.string,
     payment: defaultModel.string,
-    imageTour:defaultModel.string,
+    imageTour:defaultModel.array,
     status:defaultModel.string
 }, { timestamps: true })
 
