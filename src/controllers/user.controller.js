@@ -49,6 +49,8 @@ exports.registerAsync = async (req, res, next) => {
 	}
 };
 
+
+
 exports.loginAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.loginAsync(req.value.body);
