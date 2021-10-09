@@ -10,17 +10,32 @@
   boolean: { type: Boolean, default: true },
   booleanFalse: { type: Boolean, default: false },
   object: { type: Object, default: {} },
-  stringAvatar: {type: String, default: "https://firebasestorage.googleapis.com/v0/b/travel-app-34be2.appspot.com/o/unknown.jpg?alt=media&token=3dbbbcec-60e1-419b-89b8-cedb9d7f0514"},
+  stringImage: {type: String, default: "https://firebasestorage.googleapis.com/v0/b/travel-app-34be2.appspot.com/o/unknown.jpg?alt=media&token=3dbbbcec-60e1-419b-89b8-cedb9d7f0514"},
 };
 const defaultRoles = {
-  Admin: 1,
   User: 0,
+  Admin: 1,
   Staff:2
 }
 
 const defaultEnterprises = {
-  hotel: 1,
-  restaurant:0,
+  Enterprise:0,
+  Hotel: 1,
+  Restaurant:2
+}
+
+const defaultVehicles = {
+  Car: 0,
+  Bus: 1,
+  Ship: 2,
+  Plane: 3
+}
+
+const defaultStatus = {
+  ACTIVE: 0,
+  INACTIVE: 1,
+  LOCK: 2,
+  DELETE: 3
 }
 
 const defaultChatSocket={
@@ -33,5 +48,7 @@ module.exports ={
   defaultModel,
   defaultRoles,
   defaultEnterprises,
+  defaultVehicles,
+  defaultStatus,
   defaultChatSocket
 }

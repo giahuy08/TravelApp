@@ -54,9 +54,8 @@ exports.getAllVehicleAsync = async () => {
 exports.createVehicleAsync = async req => {
     try {
         const { name, type, vehicleNumber } = req.body;
-        const Image = req.files["Image"];
-        if(Image == null)
-        {
+        const Image = req.files["ImagesVehicle"];
+        if (Image == null) {
             return {
                 message: 'Bạn chưa chọn hình ảnh!!',
                 success: false
@@ -64,10 +63,10 @@ exports.createVehicleAsync = async req => {
         }
         var urlImageMain = [];
         for (let i = 0; i < Image.length; i++) {
-            var addImage = req.files["Image"][i];
+            var addImage = req.files["ImagesVehicle"][i];
             console.log(addImage.filename);
             const urlImage = await UploadImage(addImage.filename, "Vehicles/");
-            urlImageMain.push(urlImage)
+            urlImageMain.push(urlImage);
         }
         const vehicle = new VEHICLE({
             name: name,
@@ -97,8 +96,7 @@ exports.createVehicleAsync = async req => {
 exports.updateVehicleAsync = async req => {
     try {
         const Image = req.files["Image"];
-        if(Image == null)
-        {
+        if (Image == null) {
             const vehicle = await VEHICLE.findOneAndUpdate(
                 { _id: req.body.id },
                 req.body,
@@ -110,7 +108,7 @@ exports.updateVehicleAsync = async req => {
                 message: 'Update vehicle successfully',
                 success: true,
                 data: vehicle
-    
+
             };
         }
         else {
@@ -125,24 +123,18 @@ exports.updateVehicleAsync = async req => {
             const vehicle = await VEHICLE.findOneAndUpdate(
                 { _id: req.body.id },
                 {
+                    name: name,
+                    type: type,
+                    vehicleNumber: vehicleNumber,
                     imagesVehicle: urlImageMain
                 },
-                {
-                    new: true
-                }
-            )
-            vehicle = await VEHICLE.findOneAndUpdate(
-                { _id: req.body.id },
-                req.body,
-                {
-                    new: true
-                }
-            )
+                { new: true }
+            );
             return {
                 message: 'Update vehicle successfully',
                 success: true,
                 data: vehicle
-    
+
             };
         }
     }

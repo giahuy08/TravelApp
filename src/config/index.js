@@ -12,9 +12,13 @@ const configEnv = {
 	Password: process.env.Password
 };
 const DFRoleValue = ["User", "Admin","Staff"]
-const DFEnterprisesValue = ["Hotel", "Restaurant"]
+const DFVehiclesValue = ["Car","Bus", "Ship", "Plane"]
+const DFEnterprisesValue = ["Enterprise","Hotel", "Restaurant"]
+const DFStatusesValue = ["ACTIVE","INACTIVE", "LOCK", "DELETE"]
 module.exports = {
 	configEnv,
 	DFRoleValue,
-	DFEnterprisesValue
+	DFVehiclesValue,
+	DFEnterprisesValue,
+	DFStatusesValue,
 };

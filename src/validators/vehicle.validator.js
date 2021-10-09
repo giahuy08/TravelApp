@@ -3,8 +3,7 @@ const schemas = {
 	createVehicle: joi.object().keys({
 		name: joi.string().required(),
 		type: joi.string().required(),
-        vehicleNumber:joi.string().required(),
-		imagesVehicle:joi.array().required(),
+        vehicleNumber:joi.string().required()
 	}),
 };
 module.exports = schemas;

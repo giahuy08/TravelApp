@@ -5,6 +5,9 @@ const router = express.Router();
 const path = require("path");
 var multer = require("multer");
 const Validate = require("../validators")
+const { checkRole } = require('../middleware/checkRole.middleware')
+const { defaultRoles } = require('../config/defineModel')
+const jwtServices = require("../services/jwt.services")
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, "uploads/");
@@ -14,13 +17,13 @@ const storage = multer.diskStorage({
     },
   });
 const upload = multer({ storage: storage });
-var cpUpload = upload.fields([{ name: 'Image', maxCount: 100 }]);
+var cpUpload = upload.fields([{ name: 'ImagesVehicle', maxCount: 100 }]);
 
 router.get('/getOneVehicle', Controller.getOneVehicleAsync)
 router.get('/getAllVehicle', Controller.getAllVehicleAsync)
-router.post('/createVehicle', cpUpload, Controller.createVehicleAsync);
-router.put('/updateVehicle', cpUpload, Controller.updateVehicleAsync);
-router.delete('/deleteVehicle',Controller.deleteVehicleAsync);
+router.post('/createVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), cpUpload, Controller.createVehicleAsync);
+router.put('/updateVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), cpUpload, Controller.updateVehicleAsync);
+router.delete('/deleteVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteVehicleAsync);
 
 
 
