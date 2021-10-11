@@ -112,7 +112,7 @@ exports.updateVehicleAsync = async req => {
             };
         }
         else {
-            const { name, type, vehicleNumber } = req.body;
+            //const { name, type, vehicleNumber } = req.body;
             var urlImageMain = [];
             for (let i = 0; i < Image.length; i++) {
                 var addImage = req.files["Image"][i];
@@ -122,10 +122,7 @@ exports.updateVehicleAsync = async req => {
             }
             const vehicle = await VEHICLE.findOneAndUpdate(
                 { _id: req.body.id },
-                {
-                    name: name,
-                    type: type,
-                    vehicleNumber: vehicleNumber,
+                req.body = {
                     imagesVehicle: urlImageMain
                 },
                 { new: true }

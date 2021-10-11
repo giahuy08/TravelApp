@@ -4,13 +4,13 @@ const Schema = mongoose.Schema
 
 
 const Tour = new Schema({
-    idEnterprise: defaultModel.stringR,
+    idEnterprise: defaultModel.string,
     idVehicle: defaultModel.array,
     name:defaultModel.stringR,
     place:defaultModel.stringR,
     detail:defaultModel.string,
     payment: defaultModel.string,
-    imageTour:defaultModel.array,
+    imagesTour:defaultModel.array,
     status:defaultModel.number
 }, { timestamps: true })
 
