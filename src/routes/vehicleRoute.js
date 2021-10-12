@@ -21,8 +21,8 @@ var cpUpload = upload.fields([{ name: 'ImagesVehicle', maxCount: 100 }]);
 
 router.get('/getOneVehicle', Controller.getOneVehicleAsync)
 router.get('/getAllVehicle', Controller.getAllVehicleAsync)
-router.post('/createVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), cpUpload, Controller.createVehicleAsync);
-router.put('/updateVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), cpUpload, Controller.updateVehicleAsync);
+router.post('/createVehicle', cpUpload,jwtServices.verify, checkRole([defaultRoles.Admin]),Validate.body(SchemaValidateVehicle.createVehicle), Controller.createVehicleAsync);
+router.put('/updateVehicle', cpUpload,jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.updateVehicleAsync);
 router.delete('/deleteVehicle', jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteVehicleAsync);
 
 

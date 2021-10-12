@@ -35,27 +35,30 @@ exports.getAllEnterpriseAsync = async () => {
 };
 exports.createEnterpriseAsync = async req => {
 	try {
-		const { name, detail, status } = req.body;
+		//const { name, detail } = req.value.body;
 		const Image = req.files["Logo"][0];
 		if (Image == null) {
+			const enterprise = new ENTERPRISE(req.value.body);
+			await enterprise.save();
 			return {
-				message: 'Bạn chưa chọn hình ảnh!!',
-				success: false
+				message: 'Successfully create Enterprise',
+				success: true,
+				data: enterprise
 			};
 		}
-		const urlImage = await UploadImage(Image.filename, "Enterprises/");
-		const enterprise = new ENTERPRISE({
-			name: name,
-			detail: detail,
-			logo: urlImage,
-			status: status
-		});
-		await enterprise.save();
-		return {
-			message: 'Successfully create Enterprise',
-			success: true,
-			data: enterprise
-		};
+		else {
+			const urlImage = await UploadImage(Image.filename, "Enterprises/");
+			const enterprise = new ENTERPRISE(req.value.body = {
+				logo: urlImage,
+			});
+			await enterprise.save();
+			return {
+				message: 'Successfully create Enterprise',
+				success: true,
+				data: enterprise
+			};
+		}
+
 	} catch (e) {
 		console.log(e);
 		return {
@@ -80,16 +83,12 @@ exports.updateEnterpriseAsync = async req => {
 			};
 		}
 		else {
-			const { name,type, detail, status } = req.body;
+			//const { name, type, detail, status } = req.body;
 			const urlImage = await UploadImage(Image.filename, "Enterprises/");
 			const enterprise = await ENTERPRISE.findOneAndUpdate(
 				{ _id: req.body.id },
-				{
-					name: name,
-					type: type,
-					detail: detail,
-					logo: urlImage,
-					status: status
+				req.body = {
+					logo: urlImage
 				},
 				{ new: true }
 			);

@@ -22,8 +22,8 @@ var cpUpload = upload.fields([{ name: 'Logo', maxCount: 100 }]);
 
 router.get('/getOneEnterprise', Controller.getOneEnterpriseAsync)
 router.get('/getAllEnterprise', Controller.getAllEnterpriseAsync)
-router.post('/createEnterprise',jwtServices.verify, checkRole([defaultRoles.Admin]), cpUpload, Controller.createEnterpriseAsync)
-router.put('/updateEnterprise', jwtServices.verify, checkRole([defaultRoles.Admin]), cpUpload, Controller.updateEnterpriseAsync)
+router.post('/createEnterprise',cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateEnterprise.createEnterprise), Controller.createEnterpriseAsync)
+router.put('/updateEnterprise', cpUpload,jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateEnterpriseAsync)
 router.delete('/deleteEnterprise',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteEnterpriseAsync)
 
 
