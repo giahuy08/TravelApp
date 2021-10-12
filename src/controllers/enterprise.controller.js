@@ -53,7 +53,7 @@ exports.getAllEnterpriseAsync = async (req, res, next) => {
 };
 exports.createEnterpriseAsync = async (req, res, next) => {
 	try {
-		const resServices = await enterpriseServices.createEnterpriseAsync(req.body);
+		const resServices = await enterpriseServices.createEnterpriseAsync(req);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -76,7 +76,7 @@ exports.createEnterpriseAsync = async (req, res, next) => {
 };
 exports.updateEnterpriseAsync = async (req, res, next) => {
 	try {
-		const resServices = await enterpriseServices.updateEnterpriseAsync(req.body.id,req.body);
+		const resServices = await enterpriseServices.updateEnterpriseAsync(req);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,

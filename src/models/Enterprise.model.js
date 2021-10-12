@@ -7,8 +7,8 @@ const Enterprise = new Schema({
     name:defaultModel.stringR,
     type:defaultModel.number,
     detail:defaultModel.string,
-    logo:defaultModel.string,
-    status:defaultModel.string
+    logo:defaultModel.stringImage,
+    status:defaultModel.number
 }, { timestamps: true })
 
 

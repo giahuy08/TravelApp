@@ -42,7 +42,49 @@ exports.registerUserAsync = async body => {
 			success: true,
 			data: generateToken,
 			email: email,
-			otp:otp
+			otp: otp
+		};
+	} catch (err) {
+		console.log(err);
+		return {
+			error: 'Internal Server',
+			success: false
+		};
+	}
+};
+
+exports.registerAdminAsync = async body => {
+	try {
+		const { email, password, phone, name, address } = body;
+		//check if email is already in the database
+		const emailExist = await USER.findOne({
+			email: email
+		});
+		if (emailExist)
+			return {
+				message: 'Email already exists',
+				success: false
+			};
+		const hashedPassword = await bcrypt.hash(password, 8);
+		const newUser = new USER({
+			email: email,
+			password: hashedPassword,
+			phone: phone,
+			name: name,
+			address: address,
+			role: defaultRoles.Admin
+		});
+		await newUser.save();
+		const generateToken = await jwtServices.createToken({
+			id: newUser._id,
+			role: newUser.role
+		});
+		return {
+			message: 'Successfully Register Admin',
+			success: true,
+			data: generateToken,
+			email: email,
+			role: defaultRoles.Admin
 		};
 	} catch (err) {
 		console.log(err);
@@ -81,7 +123,7 @@ exports.loginAsync = async body => {
 			role: user.role
 		});
 		console.log(generateToken);
-		
+
 		return {
 			message: 'Successfully login',
 			success: true,
@@ -98,9 +140,9 @@ exports.loginAsync = async body => {
 	}
 };
 
-exports.findUserByIdAsync = async body => {
+exports.findUserByIdAsync = async (id) => {
 	try {
-		const user = await USER.findById(body);
+		const user = await USER.findOne({ _id: id });
 		if (!user) {
 			return {
 				message: 'Get User Fail',
@@ -113,6 +155,7 @@ exports.findUserByIdAsync = async body => {
 			data: user
 		};
 	} catch (err) {
+		console.log(err);
 		return {
 			message: 'An error occurred',
 			success: false
@@ -122,7 +165,7 @@ exports.findUserByIdAsync = async body => {
 
 exports.changePasswordAsync = async (id, body) => {
 	try {
-		const user = await USER.findById(id);
+		const user = await USER.findOne({ _id: id });
 		const oldPassword = body.oldPassword;
 		const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
 		if (!isPasswordMatch) {
@@ -150,7 +193,11 @@ exports.changePasswordAsync = async (id, body) => {
 exports.fotgotPassword = async body => {
 	try {
 		const email = body.email;
-		const result = await USER.findOne({ email: email });
+		var otp = await otpGenerator.generate(6, {
+			upperCase: false,
+			specialChars: false
+		});
+		const result = await USER.findOneAndUpdate({ email: email }, { otp: otp }, { new: true });
 		if (result != null) {
 			// var smtpTransport = nodemailer.createTransport({
 			// 	service: "gmail", //smtp.gmail.com  //in place of service use host...
@@ -197,7 +244,6 @@ exports.fotgotPassword = async body => {
 					success: false
 				};
 			} else {
-				console.log('voo nef');
 				return {
 					message: 'Send Email Success',
 					success: true

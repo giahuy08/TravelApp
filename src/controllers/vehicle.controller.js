@@ -2,6 +2,7 @@ const controller = require('./controller');
 const vehicleServices = require('../services/vehicle.services');
 const { defaultRoles } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
+const { UploadImage } = require("../services/uploadFirebase.service");
 
 
 exports.getOneVehicleAsync = async (req,res,next) =>{
@@ -61,7 +62,7 @@ exports.getAllVehicleAsync = async (req,res,next) =>{
 
 exports.createVehicleAsync = async (req,res,next) =>{
     try{
-        const resServices = await vehicleServices.createVehicleAsync(req.body);
+        const resServices = await vehicleServices.createVehicleAsync(req);
         if(resServices.success){
 
             return controller.sendSuccess(
@@ -87,7 +88,7 @@ exports.createVehicleAsync = async (req,res,next) =>{
 
 exports.updateVehicleAsync = async (req,res,next) =>{
     try{
-        const resServices = await vehicleServices.updateVehicleAsync(req.body.id,req.body);
+        const resServices = await vehicleServices.updateVehicleAsync(req);
         if(resServices.success){
 
             return controller.sendSuccess(

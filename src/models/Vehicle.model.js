@@ -5,10 +5,10 @@ const Schema = mongoose.Schema
 
 const Vehicle = new Schema({
     name:defaultModel.stringR,
-    type:defaultModel.string,
+    type:defaultModel.number,
     vehicleNumber:defaultModel.string,
-    imageVehicle:defaultModel.string,
-   
+    imagesVehicle:defaultModel.array,
+    status: defaultModel.number
 }, { timestamps: true })
 
 

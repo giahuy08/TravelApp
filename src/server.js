@@ -8,6 +8,10 @@ const cookieParser = require("cookie-parser")
 const cors = require("cors")
 const server = require("http").Server(app);
 var multer = require('multer');
+const upload = multer({
+    storage: multer.memoryStorage()
+})
+
 // var upload = multer();
 // app.use(upload.array()); 
 
