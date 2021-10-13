@@ -33,32 +33,15 @@ exports.getAllEnterpriseAsync = async () => {
 		};
 	}
 };
-exports.createEnterpriseAsync = async req => {
+exports.createEnterpriseAsync = async body => {
 	try {
-		//const { name, detail } = req.value.body;
-		const Image = req.files["Logo"][0];
-		if (Image == null) {
-			const enterprise = new ENTERPRISE(req.value.body);
-			await enterprise.save();
-			return {
-				message: 'Successfully create Enterprise',
-				success: true,
-				data: enterprise
-			};
-		}
-		else {
-			const urlImage = await UploadImage(Image.filename, "Enterprises/");
-			const enterprise = new ENTERPRISE(req.value.body = {
-				logo: urlImage,
-			});
-			await enterprise.save();
-			return {
-				message: 'Successfully create Enterprise',
-				success: true,
-				data: enterprise
-			};
-		}
-
+		const enterprise = new ENTERPRISE(body);
+		await enterprise.save();
+		return {
+			message: 'Successfully create Enterprise',
+			success: true,
+			data: enterprise
+		};
 	} catch (e) {
 		console.log(e);
 		return {
@@ -67,38 +50,18 @@ exports.createEnterpriseAsync = async req => {
 		};
 	}
 };
-exports.updateEnterpriseAsync = async req => {
+exports.updateEnterpriseAsync = async (id, body) => {
 	try {
-		const Image = req.files["Logo"];
-		if (Image == null) {
-			const enterprise = await ENTERPRISE.findOneAndUpdate(
-				{ _id: req.body.id },
-				req.body,
-				{ new: true }
-			);
-			return {
-				message: 'Successfully Update Enterprise',
-				success: true,
-				data: enterprise
-			};
-		}
-		else {
-			//const { name, type, detail, status } = req.body;
-			const urlImage = await UploadImage(Image.filename, "Enterprises/");
-			const enterprise = await ENTERPRISE.findOneAndUpdate(
-				{ _id: req.body.id },
-				req.body = {
-					logo: urlImage
-				},
-				{ new: true }
-			);
-			return {
-				message: 'Successfully Update Enterprise',
-				success: true,
-				data: enterprise
-			};
-		}
-
+		const enterprise = await ENTERPRISE.findOneAndUpdate(
+			{ _id: id },
+			body,
+			{ new: true }
+		);
+		return {
+			message: 'Successfully Update Enterprise',
+			success: true,
+			data: enterprise
+		};
 	} catch (e) {
 		console.log(e);
 		return {

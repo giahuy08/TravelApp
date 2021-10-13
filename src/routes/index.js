@@ -4,6 +4,7 @@ const enterpriseRoute = require('./enterpriseRoute')
 const vehicleRoute = require('./vehicleRoute')
 const tourRoute = require('./tourRoute')
 const uploadfileRoute = require('./uploadfileRoute')
+const discountRoute = require('./discountRoute')
 
 
 
@@ -12,6 +13,7 @@ router.use('/user', useRoute)
 router.use('/enterprise', enterpriseRoute)
 router.use('/vehicle', vehicleRoute)
 router.use('/tour', tourRoute)
+router.use('/discount', discountRoute)
 router.use('/uploadfile', uploadfileRoute) //Test
 
 
