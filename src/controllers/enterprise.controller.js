@@ -85,7 +85,7 @@ exports.updateEnterpriseAsync = async (req, res, next) => {
 		const Image = req.files["Logo"][0];
 		if (Image != null) {
 			const urlImage = await UploadImage(Image.filename, "Enterprises/");
-			req.body.Logo = urlImage;
+			req.body.logo = urlImage;
 		}
 		const resServices = await enterpriseServices.updateEnterpriseAsync(req.body.id, req.body);
 		if (resServices.success) {

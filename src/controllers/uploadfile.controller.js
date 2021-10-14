@@ -7,7 +7,6 @@ const nodemailer = require('nodemailer');
 
 exports.createUploadFileAsync = async (req, res, next) => {
 	try {
-
 		const resServices = await uploadfileServices.createUploadFileAsync(req);
 		if (resServices.success) {
 			return controller.sendSuccess(

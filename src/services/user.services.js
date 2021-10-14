@@ -97,7 +97,6 @@ exports.registerAdminAsync = async body => {
 
 exports.loginAsync = async body => {
 	try {
-
 		const { email, password } = body;
 		const user = await USER.findOne({
 			email: email

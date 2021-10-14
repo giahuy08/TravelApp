@@ -8,7 +8,7 @@ const ReviewTour = new Schema({
     idTour:defaultModel.stringR,
     star:defaultModel.number,
     comment:defaultModel.string,
-    imageReview:defaultModel.array,
+    imagesReview:defaultModel.array,
     status:defaultModel.number
 }, { timestamps: true })
 

@@ -1,7 +1,7 @@
 const joi = require('@hapi/joi');
 const schemas = {
     createHotelRoom: joi.object().keys({
-        idEnterprise:joi.string().required(),
+        idEnterprise:joi.string(),
         name:joi.string().required(),
         size:joi.number().required(),
         floor:joi.number().required(),

@@ -1,4 +1,6 @@
 const TOUR = require('../models/Tour.model');
+const VEHICLE = require('../models/Vehicle.model');
+const ENTERPRISE = require('../models/Enterprise.model');
 
 exports.getOneTourAsync = async (id) => {
     try {
@@ -52,7 +54,6 @@ exports.createTourAsync = async body => {
 };
 exports.updateTourAsync = async (id, body) => {
     try {
-
         const tour = await TOUR.findOneAndUpdate(
             { _id: id },
             body,
@@ -78,6 +79,7 @@ exports.deleteTourAsync = async (id) => {
         return {
             message: 'Successfully Delete Tour',
             success: true,
+            data: tour
         };
     } catch (e) {
         console.log(e);
