@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
     },
   });
 const upload = multer({ storage: storage });
-var cpUpload = upload.fields([{ name: 'ImageTour', maxCount: 100 }]);
+var cpUpload = upload.fields([{ name: 'ImagesTour', maxCount: 100 }]);
 
 
 router.get('/getOneTour', Controller.getOneTourAsync)

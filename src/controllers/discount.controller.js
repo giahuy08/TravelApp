@@ -1,14 +1,14 @@
 const controller = require('./controller');
-const enterpriseServices = require('../services/enterprise.service');
+const DiscountServices = require('../services/Discount.service');
 const userServices = require('../services/user.services');
-const { defaultEnterprises } = require('../config/defineModel');
+const { defaultDiscounts } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
 
-exports.getOneEnterpriseAsync = async (req, res, next) => {
+exports.getOneDiscountAsync = async (req, res, next) => {
 	try {
-		const resServices = await enterpriseServices.getOneEnterpriseAsync(req.query.id);
+		const resServices = await DiscountServices.getOneDiscountAsync(req.query.id);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -29,9 +29,9 @@ exports.getOneEnterpriseAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
-exports.getAllEnterpriseAsync = async (req, res, next) => {
+exports.getAllDiscountAsync = async (req, res, next) => {
 	try {
-		const resServices = await enterpriseServices.getAllEnterpriseAsync();
+		const resServices = await DiscountServices.getAllDiscountAsync();
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -52,14 +52,9 @@ exports.getAllEnterpriseAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
-exports.createEnterpriseAsync = async (req, res, next) => {
+exports.createDiscountAsync = async (req, res, next) => {
 	try {
-		const Image = req.files["Logo"][0];
-		if (Image != null) {
-			const urlImage = await UploadImage(Image.filename, "Enterprises/");
-			req.value.body.logo = urlImage;
-		}
-		const resServices = await enterpriseServices.createEnterpriseAsync(req.value.body);
+		const resServices = await DiscountServices.createDiscountAsync(req.value.body);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -80,14 +75,9 @@ exports.createEnterpriseAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
-exports.updateEnterpriseAsync = async (req, res, next) => {
+exports.updateDiscountAsync = async (req, res, next) => {
 	try {
-		const Image = req.files["Logo"][0];
-		if (Image != null) {
-			const urlImage = await UploadImage(Image.filename, "Enterprises/");
-			req.body.Logo = urlImage;
-		}
-		const resServices = await enterpriseServices.updateEnterpriseAsync(req.body.id, req.body);
+		const resServices = await DiscountServices.updateDiscountAsync(req.body.id, req.body);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
@@ -109,9 +99,9 @@ exports.updateEnterpriseAsync = async (req, res, next) => {
 	}
 };
 
-exports.deleteEnterpriseAsync = async (req, res, next) => {
+exports.deleteDiscountAsync = async (req, res, next) => {
 	try {
-		const resServices = await enterpriseServices.deleteEnterpriseAsync(req.query.id);
+		const resServices = await DiscountServices.deleteDiscountAsync(req.query.id);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
