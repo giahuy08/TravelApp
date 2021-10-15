@@ -1,13 +1,12 @@
-const DISCOUNT = require('../models/Discount.model');
-const TOUR = require('../models/Tour.model');
+const HOTELROOM = require('../models/HotelRoom.model');
 
-exports.getOneDiscountAsync = async (id) => {
+exports.getOneHotelRoomAsync = async (id) => {
     try {
-        const discount = await DISCOUNT.findById({ _id: id });
+        const hotelroom = await HOTELROOM.findById({ _id: id });
         return {
-            message: 'Successfully Get One Discount',
+            message: 'Successfully Get One HotelRoom',
             success: true,
-            data: discount
+            data: hotelroom
         };
     } catch (e) {
         console.log(e);
@@ -17,13 +16,13 @@ exports.getOneDiscountAsync = async (id) => {
         };
     }
 };
-exports.getAllDiscountAsync = async () => {
+exports.getAllHotelRoomAsync = async () => {
     try {
-        const discount = await DISCOUNT.find();
+        const hotelroom = await HOTELROOM.find();
         return {
-            message: 'Successfully Get All Discount',
+            message: 'Successfully Get All HotelRoom',
             success: true,
-            data: discount
+            data: hotelroom
         };
     } catch (e) {
         console.log(e);
@@ -33,13 +32,13 @@ exports.getAllDiscountAsync = async () => {
         };
     }
 };
-exports.getDiscountOfTourAsync = async (idTour) => {
+exports.getRoomOfEnterpriseAsync = async (idEnterprise) => {
     try {
-        const discount = await DISCOUNT.find({ key: idTour });
+        const hotelroom = await HOTELROOM.find({ key: idEnterprise });
         return {
-            message: 'Successfully Get Discount Of Tour',
+            message: 'Successfully Get HotelRoom Of Enterprise',
             success: true,
-            data: discount
+            data: hotelroom
         };
     } catch (e) {
         console.log(e);
@@ -49,14 +48,14 @@ exports.getDiscountOfTourAsync = async (idTour) => {
         };
     }
 };
-exports.createDiscountAsync = async body => {
+exports.createHotelRoomAsync = async body => {
     try {
-        const discount = new DISCOUNT(body);
-        await discount.save();
+        const hotelroom = new HOTELROOM(body);
+        await hotelroom.save();
         return {
-            message: 'Successfully create Discount',
+            message: 'Successfully create HotelRoom',
             success: true,
-            data: discount
+            data: hotelroom
         };
 
     } catch (e) {
@@ -67,17 +66,17 @@ exports.createDiscountAsync = async body => {
         };
     }
 };
-exports.updateDiscountAsync = async (id, body) => {
+exports.updateHotelRoomAsync = async (id, body) => {
     try {
-        const discount = await DISCOUNT.findOneAndUpdate(
+        const hotelroom = await HOTELROOM.findOneAndUpdate(
             { _id: id },
             body,
             { new: true }
         );
         return {
-            message: 'Successfully Update Discount',
+            message: 'Successfully Update HotelRoom',
             success: true,
-            data: discount
+            data: hotelroom
         };
 
     } catch (e) {
@@ -88,13 +87,13 @@ exports.updateDiscountAsync = async (id, body) => {
         };
     }
 };
-exports.deleteDiscountAsync = async (id) => {
+exports.deleteHotelRoomAsync = async (id) => {
     try {
-        const discount = await DISCOUNT.deleteOne({ _id: id });
+        const hotelroom = await HOTELROOM.deleteOne({ _id: id });
         return {
-            message: 'Successfully Delete Discount',
+            message: 'Successfully Delete HotelRoom',
             success: true,
-            data: discount
+            data: hotelroom
         };
     } catch (e) {
         console.log(e);

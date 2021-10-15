@@ -64,10 +64,12 @@ exports.createVehicleAsync = async (req, res, next) => {
     try {
         const Image = req.files["ImagesVehicle"];
         if (Image == null) {
-            return {
-                message: 'Bạn chưa chọn hình ảnh!!',
-                success: false
-            };
+            return controller.sendSuccess(
+				res,
+				null,
+				404,
+				'Image does not exist'
+			);
         }
         var urlImageMain = [];
         for (let i = 0; i < Image.length; i++) {

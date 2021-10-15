@@ -1,13 +1,14 @@
-const DISCOUNT = require('../models/Discount.model');
+const REVIEWTOUR = require('../models/ReviewTour.model');
 const TOUR = require('../models/Tour.model');
+const USER = require('../models/User.model');
 
-exports.getOneDiscountAsync = async (id) => {
+exports.getOneReviewTourAsync = async (id) => {
     try {
-        const discount = await DISCOUNT.findById({ _id: id });
+        const reviewTour = await REVIEWTOUR.findById({ _id: id });
         return {
-            message: 'Successfully Get One Discount',
+            message: 'Successfully Get One ReviewTour',
             success: true,
-            data: discount
+            data: reviewTour
         };
     } catch (e) {
         console.log(e);
@@ -17,13 +18,13 @@ exports.getOneDiscountAsync = async (id) => {
         };
     }
 };
-exports.getAllDiscountAsync = async () => {
+exports.getAllReviewTourAsync = async () => {
     try {
-        const discount = await DISCOUNT.find();
+        const reviewTour = await REVIEWTOUR.find();
         return {
-            message: 'Successfully Get All Discount',
+            message: 'Successfully Get All ReviewTour',
             success: true,
-            data: discount
+            data: reviewTour
         };
     } catch (e) {
         console.log(e);
@@ -33,13 +34,13 @@ exports.getAllDiscountAsync = async () => {
         };
     }
 };
-exports.getDiscountOfTourAsync = async (idTour) => {
+exports.getReviewOfTourAsync = async (idTour) => {
     try {
-        const discount = await DISCOUNT.find({ key: idTour });
+        const reviewTour = await REVIEWTOUR.find({ key: idTour });
         return {
-            message: 'Successfully Get Discount Of Tour',
+            message: 'Successfully Get All ReviewTour',
             success: true,
-            data: discount
+            data: reviewTour
         };
     } catch (e) {
         console.log(e);
@@ -49,14 +50,14 @@ exports.getDiscountOfTourAsync = async (idTour) => {
         };
     }
 };
-exports.createDiscountAsync = async body => {
+exports.createReviewTourAsync = async body => {
     try {
-        const discount = new DISCOUNT(body);
-        await discount.save();
+        const reviewTour = new REVIEWTOUR(body);
+        await reviewTour.save();
         return {
-            message: 'Successfully create Discount',
+            message: 'Successfully create ReviewTour',
             success: true,
-            data: discount
+            data: reviewTour
         };
 
     } catch (e) {
@@ -67,17 +68,17 @@ exports.createDiscountAsync = async body => {
         };
     }
 };
-exports.updateDiscountAsync = async (id, body) => {
+exports.updateReviewTourAsync = async (id, body) => {
     try {
-        const discount = await DISCOUNT.findOneAndUpdate(
+        const updateReviewTour = await REVIEWTOUR.findOneAndUpdate(
             { _id: id },
             body,
             { new: true }
         );
         return {
-            message: 'Successfully Update Discount',
+            message: 'Successfully Update ReviewTour',
             success: true,
-            data: discount
+            data: updateReviewTour
         };
 
     } catch (e) {
@@ -88,13 +89,13 @@ exports.updateDiscountAsync = async (id, body) => {
         };
     }
 };
-exports.deleteDiscountAsync = async (id) => {
+exports.deleteReviewTourAsync = async (id) => {
     try {
-        const discount = await DISCOUNT.deleteOne({ _id: id });
+        const reviewTour = await REVIEWTOUR.deleteOne({ _id: id });
         return {
-            message: 'Successfully Delete Discount',
+            message: 'Successfully Delete ReviewTour',
             success: true,
-            data: discount
+            data: reviewTour
         };
     } catch (e) {
         console.log(e);

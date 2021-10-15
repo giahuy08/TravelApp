@@ -5,6 +5,7 @@ const { defaultTours } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
+const ENTERPRISE = require('../models/Enterprise.model');
 
 exports.getOneTourAsync = async (req, res, next) => {
 	try {
@@ -54,12 +55,24 @@ exports.getAllTourAsync = async (req, res, next) => {
 };
 exports.createTourAsync = async (req, res, next) => {
 	try {
+		console.log(req.value.body.idEnterprise);
+		const enterprise = await ENTERPRISE.findOne({ _id: req.value.body.idEnterprise });
+		if (enterprise == null) {
+			return controller.sendSuccess(
+				res,
+				enterprise.data,
+				404,
+				'Enterprise does not exist'
+			);
+		}
 		const Image = req.files["ImagesTour"];
 		if (Image == null) {
-			return {
-				message: 'Bạn chưa chọn hình ảnh!!',
-				success: false
-			};
+			return controller.sendSuccess(
+				res,
+				Image.data,
+				404,
+				'Image does not exist'
+			);
 		}
 		var urlImageMain = [];
 		for (let i = 0; i < Image.length; i++) {
@@ -68,7 +81,7 @@ exports.createTourAsync = async (req, res, next) => {
 			const urlImage = await UploadImage(addImage.filename, "Tours/" + req.value.body.name + "/");
 			urlImageMain.push(urlImage);
 		}
-		req.value.body.ImageTour = urlImageMain;
+		req.value.body.imagesTour = urlImageMain;
 		const resServices = await tourServices.createTourAsync(req.value.body);
 		if (resServices.success) {
 			return controller.sendSuccess(
@@ -92,16 +105,27 @@ exports.createTourAsync = async (req, res, next) => {
 };
 exports.updateTourAsync = async (req, res, next) => {
 	try {
+		if (req.body.idEnterprise != null) {
+			const enterprise = await ENTERPRISE.findOne({ _id: req.body.idEnterprise });
+			if (enterprise == null) {
+				return controller.sendSuccess(
+					res,
+					null,
+					404,
+					'Enterprise does not exist'
+				);
+			}
+		}
 		const Image = req.files["ImagesTour"];
 		if (Image != null) {
 			var urlImageMain = [];
 			for (let i = 0; i < Image.length; i++) {
 				var addImage = req.files["ImagesTour"][i];
 				console.log(addImage.filename);
-				const urlImage = await UploadImage(addImage.filename, "Tours/" + req.value.body.name + "/");
+				const urlImage = await UploadImage(addImage.filename, "Tours/" + req.body.name + "/");
 				urlImageMain.push(urlImage);
 			}
-			req.body.ImagesTour = urlImageMain;
+			req.body.imagesTour = urlImageMain;
 		}
 		const resServices = await tourServices.updateTourAsync(req.body.id, req.body);
 		if (resServices.success) {
