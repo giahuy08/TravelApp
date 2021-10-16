@@ -6,7 +6,7 @@ const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
 const ENTERPRISE = require('../models/Enterprise.model');
-
+const VEHICLE = require('../models/Vehicle.model');
 exports.getOneTourAsync = async (req, res, next) => {
 	try {
 		const resServices = await tourServices.getOneTourAsync(req.query.id);
@@ -65,6 +65,22 @@ exports.createTourAsync = async (req, res, next) => {
 				'Enterprise does not exist'
 			);
 		}
+
+		const vehicles = req.value.body.idVehicle;
+		for(let i=0;i<vehicles.length;i++){
+			var vehicle = await VEHICLE.findOne({ _id: vehicles[i]});
+			if(vehicle==null){
+				return controller.sendSuccess(
+					res,
+					null,
+					404,
+					'Vehicle does not exist'
+				);
+			}
+			
+		
+		}
+
 		const Image = req.files["ImagesTour"];
 		if (Image == null) {
 			return controller.sendSuccess(
@@ -74,6 +90,7 @@ exports.createTourAsync = async (req, res, next) => {
 				'Image does not exist'
 			);
 		}
+		
 		var urlImageMain = [];
 		for (let i = 0; i < Image.length; i++) {
 			var addImage = req.files["ImagesTour"][i];

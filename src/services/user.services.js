@@ -95,6 +95,8 @@ exports.registerAdminAsync = async body => {
 	}
 };
 
+
+
 exports.loginAsync = async body => {
 	try {
 		const { email, password } = body;
