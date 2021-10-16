@@ -60,7 +60,7 @@ exports.createTourAsync = async (req, res, next) => {
 		if (enterprise == null) {
 			return controller.sendSuccess(
 				res,
-				enterprise.data,
+				null,
 				404,
 				'Enterprise does not exist'
 			);
@@ -69,7 +69,7 @@ exports.createTourAsync = async (req, res, next) => {
 		if (Image == null) {
 			return controller.sendSuccess(
 				res,
-				Image.data,
+				null,
 				404,
 				'Image does not exist'
 			);
