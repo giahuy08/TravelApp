@@ -8,8 +8,8 @@ const schemas = {
         bed:joi.number().required(),
         detail:joi.string().required(),
         price:joi.number().required(),
-        checkIn:joi.string().required(),
-        checkOut:joi.string().required(),
+        checkIn:joi.date(),
+        checkOut:joi.date(),
     }),
 };
 module.exports = schemas;

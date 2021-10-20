@@ -34,7 +34,7 @@ exports.getAllHotelRoomAsync = async () => {
 };
 exports.getRoomOfEnterpriseAsync = async (idEnterprise) => {
     try {
-        const hotelroom = await HOTELROOM.find({ key: idEnterprise });
+        const hotelroom = await HOTELROOM.find({ idEnterprise: idEnterprise });
         return {
             message: 'Successfully Get HotelRoom Of Enterprise',
             success: true,
