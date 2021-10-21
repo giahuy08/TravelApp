@@ -11,8 +11,8 @@ const HotelRoom = new Schema({
     bed:defaultModel.number,
     detail:defaultModel.string,
     price:defaultModel.number,
-    checkIn:defaultModel.string,
-    checkOut:defaultModel.string,
+    checkIn:defaultModel.date,
+    checkOut:defaultModel.date,
     status:defaultModel.number
 }, { timestamps: true })
 

@@ -7,7 +7,10 @@ const uploadfileRoute = require('./uploadfileRoute')
 const discountRoute = require('./discountRoute')
 const reviewtourRoute = require('./reviewtourRoute')
 const hotelroomRoute = require('./hotelroomRoute')
+
 const cartRoute = require('./cartRoute')
+const restauranttableRoute = require('./restauranttableRoute')
+
 
 
 const router = express.Router()
@@ -18,6 +21,7 @@ router.use('/tour', tourRoute)
 router.use('/discount', discountRoute)
 router.use('/reviewtour', reviewtourRoute)
 router.use('/hotelroom', hotelroomRoute)
+router.use('/restauranttable', restauranttableRoute)
 router.use('/uploadfile', uploadfileRoute) //Test
 router.use('/cart',cartRoute)
 
