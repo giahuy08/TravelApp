@@ -89,7 +89,7 @@ exports.updateRestaurantTableAsync = async (id, body) => {
 };
 exports.deleteRestaurantTableAsync = async (id) => {
     try {
-        const restaurantTable = await TABLE.deleteOne({ _id: id });
+        const restaurantTable = await TABLE.delete({ _id: id });
         return {
             message: 'Successfully Delete RestaurantTable',
             success: true,

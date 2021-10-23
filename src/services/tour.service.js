@@ -75,9 +75,33 @@ exports.updateTourAsync = async (id, body) => {
 };
 exports.deleteTourAsync = async (id) => {
     try {
-        const tour = await TOUR.deleteOne({ _id: id });
+        const tour = await TOUR.delete({ _id: id });
         return {
             message: 'Successfully Delete Tour',
+            success: true,
+            data: tour
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+exports.findTourByNameAsync = async (name) => {
+    try {
+        var nameRegex = new RegExp(name)
+        const tour = await TOUR.find({name :{$regex: nameRegex, $options: 'i'}});
+        if(tour.length==0){
+            return {
+                message: 'Dont find tour',
+                success: true,
+            };
+        }
+        return {
+            message: 'Successfully Get One Tour',
             success: true,
             data: tour
         };

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { defaultModel } = require('../config/defineModel')
 const Schema = mongoose.Schema
-
+const mongooseDelete = require("mongoose-delete");
 
 const Tour = new Schema({
     idEnterprise: defaultModel.string,
@@ -15,4 +15,6 @@ const Tour = new Schema({
 }, { timestamps: true })
 
 
+Tour.plugin(mongooseDelete);
+Tour.plugin(mongooseDelete, { deletedAt: true, overrideMethods: "all" });
 module.exports = mongoose.model('Tour', Tour)

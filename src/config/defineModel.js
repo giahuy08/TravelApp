@@ -46,9 +46,10 @@ const defaultChatSocket={
 }
 
 const defaultStatusPayment = {
-  paid:0,
-  unpaid:1
+  unpaid:0,
+  paid:1
 }
+
 module.exports ={
   defaultModel,
   defaultRoles,

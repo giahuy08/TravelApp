@@ -89,7 +89,7 @@ exports.updateHotelRoomAsync = async (id, body) => {
 };
 exports.deleteHotelRoomAsync = async (id) => {
     try {
-        const hotelroom = await HOTELROOM.deleteOne({ _id: id });
+        const hotelroom = await HOTELROOM.delete({ _id: id });
         return {
             message: 'Successfully Delete HotelRoom',
             success: true,

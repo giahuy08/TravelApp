@@ -87,7 +87,7 @@ exports.updateVehicleAsync = async (id, body) => {
 
 exports.deleteVehicleAsync = async (id) => {
     try {
-        const vehicle = await VEHICLE.deleteOne({ _id: id })
+        const vehicle = await VEHICLE.delete({ _id: id })
         return {
             message: 'Delete vehicle successfully',
             success: true,

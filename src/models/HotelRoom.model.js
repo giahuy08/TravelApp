@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { defaultModel } = require('../config/defineModel')
 const Schema = mongoose.Schema
+const mongooseDelete = require("mongoose-delete");
 
 
 const HotelRoom = new Schema({
@@ -16,5 +17,7 @@ const HotelRoom = new Schema({
     status:defaultModel.number
 }, { timestamps: true })
 
+HotelRoom.plugin(mongooseDelete);
+HotelRoom.plugin(mongooseDelete, { deletedAt: true, overrideMethods: "all" });
 
 module.exports = mongoose.model('HotelRoom', HotelRoom)

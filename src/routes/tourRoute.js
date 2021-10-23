@@ -25,6 +25,8 @@ router.get('/getAllTour', Controller.getAllTourAsync)
 router.post('/createTour',cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]), Validate.body(SchemaValidateTour.createTour), Controller.createTourAsync)
 router.put('/updateTour', cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateTourAsync)
 router.delete('/deleteTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteTourAsync)
+router.get('/findTourByName', Controller.findTourByNameAsync)
+
 
 
 module.exports = router
