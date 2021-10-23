@@ -91,7 +91,7 @@ exports.updateReviewTourAsync = async (id, body) => {
 };
 exports.deleteReviewTourAsync = async (id) => {
     try {
-        const reviewTour = await REVIEWTOUR.deleteOne({ _id: id });
+        const reviewTour = await REVIEWTOUR.delete({ _id: id });
         return {
             message: 'Successfully Delete ReviewTour',
             success: true,

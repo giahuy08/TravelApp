@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { defaultModel } = require('../config/defineModel')
 const Schema = mongoose.Schema
+const mongooseDelete = require("mongoose-delete");
 
 
 const RestaurantTable = new Schema({
@@ -16,4 +17,6 @@ const RestaurantTable = new Schema({
 }, { timestamps: true })
 
 
+RestaurantTable.plugin(mongooseDelete);
+RestaurantTable.plugin(mongooseDelete, { deletedAt: true, overrideMethods: "all" });
 module.exports = mongoose.model('RestaurantTable', RestaurantTable)

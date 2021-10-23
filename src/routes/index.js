@@ -7,6 +7,8 @@ const uploadfileRoute = require('./uploadfileRoute')
 const discountRoute = require('./discountRoute')
 const reviewtourRoute = require('./reviewtourRoute')
 const hotelroomRoute = require('./hotelroomRoute')
+
+const historyRoute = require('./historyRoute')
 const restauranttableRoute = require('./restauranttableRoute')
 
 
@@ -21,6 +23,7 @@ router.use('/reviewtour', reviewtourRoute)
 router.use('/hotelroom', hotelroomRoute)
 router.use('/restauranttable', restauranttableRoute)
 router.use('/uploadfile', uploadfileRoute) //Test
+router.use('/history',historyRoute)
 
 
 

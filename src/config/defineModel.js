@@ -44,11 +44,18 @@ const defaultChatSocket={
   joinRoomCSS:"JOIN_ROOM_CSS",
   leaveRoomCSS:"LEAVE_ROOM_CSS"
 }
+
+const defaultStatusPayment = {
+  unpaid:0,
+  paid:1
+}
+
 module.exports ={
   defaultModel,
   defaultRoles,
   defaultEnterprises,
   defaultVehicles,
   defaultStatus,
-  defaultChatSocket
+  defaultChatSocket,
+  defaultStatusPayment
 }

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const { defaultModel } = require('../config/defineModel')
 const Schema = mongoose.Schema
+const mongooseDelete = require("mongoose-delete");
 
 
 const Vehicle = new Schema({
@@ -11,5 +12,6 @@ const Vehicle = new Schema({
     status: defaultModel.number
 }, { timestamps: true })
 
-
+Vehicle.plugin(mongooseDelete);
+Vehicle.plugin(mongooseDelete, { deletedAt: true, overrideMethods: "all" });
 module.exports = mongoose.model('Vehicle', Vehicle)

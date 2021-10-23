@@ -72,7 +72,7 @@ exports.updateEnterpriseAsync = async (id, body) => {
 };
 exports.deleteEnterpriseAsync = async (id) => {
 	try {
-		const enterprise = await ENTERPRISE.deleteOne({ _id: id });
+		const enterprise = await ENTERPRISE.delete({ _id: id });
 		return {
 			message: 'Successfully Delete Enterprise',
 			success: true,

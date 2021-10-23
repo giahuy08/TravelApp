@@ -90,7 +90,7 @@ exports.updateDiscountAsync = async (id, body) => {
 };
 exports.deleteDiscountAsync = async (id) => {
     try {
-        const discount = await DISCOUNT.deleteOne({ _id: id });
+        const discount = await DISCOUNT.delete({ _id: id });
         return {
             message: 'Successfully Delete Discount',
             success: true,
