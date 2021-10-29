@@ -1,1 +1,1 @@
-web: node src/ecosystem.config.js
+web: node /src/server.js
