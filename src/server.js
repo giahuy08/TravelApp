@@ -12,7 +12,7 @@ const upload = multer({
     storage: multer.memoryStorage()
 })
 
-const PORT = process.env.PORT || config.httpPort;
+const PORT = process.env.PORT || 5000;
 
 // var upload = multer();
 // app.use(upload.array()); 
