@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
 const TOUR = require('../models/Tour.model');
 const REVIEWTOUR = require('../models/ReviewTour.model');
+const USER = require('../models/User.model');
 
 exports.getOneReviewTourAsync = async (req, res, next) => {
     try {
@@ -185,8 +186,8 @@ exports.deleteReviewTourAsync = async (req, res, next) => {
         const { decodeToken } = req.value.body;
         const userId = decodeToken.data.id;
         const user = await USER.findOne({ _id: userId });
-        const reviewTour = await REVIEWTOUR.findById({ _id: req.body.id });
-        if (user.role != 1 && userId != reviewTour.idUser) {
+        const reviewTour = await REVIEWTOUR.findOne({ _id: req.query.id });
+        if (user.role != 0 && userId != reviewTour.idUser) {
             return {
                 message: 'Verify Role Failed',
                 success: false

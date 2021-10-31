@@ -50,6 +50,12 @@ const defaultStatusPayment = {
   paid:1
 }
 
+const defaultCategoryTour = {
+  other: 0,
+  sea: 1,
+  highland: 2
+}
+
 module.exports ={
   defaultModel,
   defaultRoles,
@@ -57,5 +63,6 @@ module.exports ={
   defaultVehicles,
   defaultStatus,
   defaultChatSocket,
-  defaultStatusPayment
+  defaultStatusPayment,
+  defaultCategoryTour
 }

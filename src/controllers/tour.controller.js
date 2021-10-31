@@ -66,7 +66,7 @@ exports.createTourAsync = async (req, res, next) => {
 			);
 		}
 
-		const vehicles = req.value.body.idVehicle;
+		const vehicles = req.value.body.idVehicles;
 		for(let i=0;i<vehicles.length;i++){
 			var vehicle = await VEHICLE.findOne({ _id: vehicles[i]});
 			if(vehicle==null){
