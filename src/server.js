@@ -12,6 +12,8 @@ const upload = multer({
     storage: multer.memoryStorage()
 })
 
+const PORT = process.env.PORT || 5000;
+
 // var upload = multer();
 // app.use(upload.array()); 
 
@@ -40,6 +42,6 @@ global.io = require('socket.io').listen(server);
 // socket.init();
 
 
-server.listen(configEnv.PORT, () => {
-    console.log(`App running in port ${configEnv.PORT}`)
+server.listen(PORT, () => {
+    console.log(`App running in port ${PORT}`)
 })
