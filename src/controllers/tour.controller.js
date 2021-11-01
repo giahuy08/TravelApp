@@ -32,7 +32,12 @@ exports.getOneTourAsync = async (req, res, next) => {
 };
 exports.getAllTourAsync = async (req, res, next) => {
 	try {
-		const resServices = await tourServices.getAllTourAsync();
+		let query = {
+			search: req.query.search || '',
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
+		const resServices = await tourServices.getAllTourAsync(query);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,
