@@ -214,3 +214,38 @@ exports.deleteReviewTourAsync = async (req, res, next) => {
         return controller.sendError(res);
     }
 };
+
+
+exports.deleteForceReviewTourAsync = async (req, res, next) => {
+    try {
+        const { decodeToken } = req.value.body;
+        const userId = decodeToken.data.id;
+        const user = await USER.findOne({ _id: userId });
+        const reviewTour = await REVIEWTOUR.findOne({ _id: req.query.id });
+        if (user.role != 0 && userId != reviewTour.idUser) {
+            return {
+                message: 'Verify Role Failed',
+                success: false
+            };
+        }
+        const resServices = await reviewtourServices.deleteForceReviewTourAsync(req.query.id);
+        if (resServices.success) {
+            return controller.sendSuccess(
+                res,
+                resServices.data,
+                200,
+                resServices.message
+            );
+        }
+        return controller.sendSuccess(
+            res,
+            resServices.data,
+            300,
+            resServices.message
+        );
+    } catch (error) {
+        // bug
+        console.log(error);
+        return controller.sendError(res);
+    }
+};

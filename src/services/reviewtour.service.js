@@ -150,3 +150,21 @@ exports.deleteReviewTourAsync = async (id) => {
         };
     }
 };
+
+
+exports.deleteForceReviewTourAsync = async (id) => {
+    try {
+        const deleteReviewTour = await REVIEWTOUR.deleteOne({ _id: id });
+        return {
+            message: 'Successfully Delete forever ReviewTour',
+            success: true,
+         
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
