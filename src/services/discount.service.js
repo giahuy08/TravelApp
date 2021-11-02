@@ -104,3 +104,21 @@ exports.deleteDiscountAsync = async (id) => {
         };
     }
 };
+
+
+exports.deleteForceDiscountAsync = async (id) => {
+    try {
+        const discount = await DISCOUNT.deleteOne({ _id: id });
+        return {
+            message: 'Successfully Delete forever Discount',
+            success: true,
+          
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};

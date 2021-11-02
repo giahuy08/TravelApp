@@ -91,6 +91,24 @@ exports.deleteTourAsync = async (id) => {
     }
 };
 
+
+exports.deleteForceTourAsync = async (id) => {
+    try {
+        const tour = await TOUR.deleteOne({ _id: id });
+        return {
+            message: 'Successfully forever Delete Tour',
+            success: true,
+      
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
 exports.findTourByNameAsync = async (name) => {
     try {
         var nameRegex = new RegExp(name)
