@@ -20,8 +20,8 @@ exports.getOneTourAsync = async (id) => {
 };
 exports.getAllTourAsync = async body => {
     try {
-        const { search,skip,limit} = body;
-        const tour = await TOUR.find({ name: { $regex: `${search}`, $options: '$i' } }).sort({createdAt: -1}).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
+        const { skip,limit} = body;
+        const tour = await TOUR.find().sort({createdAt: -1}).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All Tour',
             success: true,
@@ -103,6 +103,53 @@ exports.findTourByNameAsync = async (name) => {
         }
         return {
             message: 'Successfully Get One Tour',
+            success: true,
+            data: tour
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+exports.findTourByCategoryAsync = async body => {
+    try {
+        const { category,skip,limit} = body;
+        const tour = await TOUR.find({ category: category }).sort({createdAt: -1}).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
+        if(tour.length==0){
+            return {
+                message: 'Dont find tour',
+                success: true,
+            };
+        }
+        return {
+            message: 'Successfully Get List Tour',
+            success: true,
+            data: tour
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
+exports.findAllTourByCategoryAsync = async (category) => {
+    try {
+        const tour = await TOUR.find({category: category});
+        if(tour.length==0){
+            return {
+                message: 'Dont find tour',
+                success: true,
+            };
+        }
+        return {
+            message: 'Successfully Get List Tour',
             success: true,
             data: tour
         };

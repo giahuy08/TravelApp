@@ -33,7 +33,6 @@ exports.getOneTourAsync = async (req, res, next) => {
 exports.getAllTourAsync = async (req, res, next) => {
 	try {
 		let query = {
-			search: req.query.search || '',
 			limit: req.query.limit || '15',
 			skip: req.query.skip || '1',
 		};
@@ -198,6 +197,59 @@ exports.deleteTourAsync = async (req, res, next) => {
 exports.findTourByNameAsync = async (req, res, next) => {
 	try {
 		const resServices = await tourServices.findTourByNameAsync(req.query.name);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
+exports.findTourByCategoryAsync = async (req, res, next) => {
+	try {
+		let query = {
+			category: req.query.category || '0',
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
+		const resServices = await tourServices.findTourByCategoryAsync(query);
+		if (resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.data,
+				200,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			300,
+			resServices.message
+		);
+	} catch (error) {
+		// bug
+		console.log(error);
+		return controller.sendError(res);
+	}
+};
+
+exports.findAllTourByCategoryAsync = async (req, res, next) => {
+	try {
+		const resServices = await tourServices.findAllTourByCategoryAsync(req.query.category);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,

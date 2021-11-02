@@ -26,6 +26,8 @@ router.post('/createTour',cpUpload, jwtServices.verify, checkRole([defaultRoles.
 router.put('/updateTour', cpUpload, jwtServices.verify, checkRole([defaultRoles.Admin]),  Controller.updateTourAsync)
 router.delete('/deleteTour',jwtServices.verify, checkRole([defaultRoles.Admin]), Controller.deleteTourAsync)
 router.get('/findTourByName', Controller.findTourByNameAsync)
+router.get('/findTourByCategory', Controller.findTourByCategoryAsync)
+router.get('/findAllTourByCategory', Controller.findAllTourByCategoryAsync)
 
 
 
