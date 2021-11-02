@@ -51,7 +51,7 @@ const defaultStatusPayment = {
 }
 
 const defaultCategoryTour = {
-  other: 0,
+  others: 0,
   sea: 1,
   highland: 2
 }
