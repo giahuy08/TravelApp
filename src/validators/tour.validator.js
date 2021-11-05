@@ -9,6 +9,7 @@ const schemas = {
         payment: joi.number().required(),
         imagesTour: joi.array(),
         category: joi.number(),
+        time: joi.string(),
     }),
 };
 module.exports = schemas;

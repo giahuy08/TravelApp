@@ -9,6 +9,7 @@ const Tour = new Schema({
     name:defaultModel.stringR,
     place:defaultModel.stringR,
     detail:defaultModel.string,
+    time: defaultModel.string,
     payment: defaultModel.number,
     imagesTour:defaultModel.array,
     star:defaultModel.number,

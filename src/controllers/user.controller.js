@@ -163,6 +163,7 @@ exports.findUserByTokenAsync = async (req, res, next) => {
 	try {
 		const { decodeToken } = req.value.body;
 		const id = decodeToken.data.id;
+		console.log(id);
 		const resServices = await userServices.findUserByIdAsync(id);
 		return controller.sendSuccess(
 			res,
