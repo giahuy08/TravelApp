@@ -56,6 +56,12 @@ const defaultCategoryTour = {
   highland: 2
 }
 
+const defaultBookTour = {
+  AWAIT:0,
+  COMPLETE:1,
+  CANCEL:2
+}
+
 module.exports ={
   defaultModel,
   defaultRoles,
@@ -64,5 +70,6 @@ module.exports ={
   defaultStatus,
   defaultChatSocket,
   defaultStatusPayment,
-  defaultCategoryTour
+  defaultCategoryTour,
+  defaultBookTour
 }
