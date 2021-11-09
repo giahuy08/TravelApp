@@ -1,10 +1,31 @@
 const { defaultBookTour } = require('../config/defineModel');
 const BOOKTOUR = require("../models/BookTour.model");
 const TOUR = require("../models/Tour.model");
+const DISCOUNT = require('../models/Discount.model');
 
 exports.bookTourAsync = async (body) => {
     try {
-        const bookTour = new BOOKTOUR(body);
+        var tour = await TOUR.findOne({ _id: body.idTour });
+        var discount = await DISCOUNT.findOne({code: body.codediscount});
+        if(discount == null)
+        {
+            return {
+                message: "Code Discount doesn't exist",
+                success: false,
+            };
+        }
+        if(body.codediscount == null)
+        {
+            const bookTour = new BOOKTOUR(body);
+            await bookTour.save();
+        }
+        var finalpayment = ((tour.payment * discount.discount)/100);
+        
+        const bookTour = new BOOKTOUR({
+            idUser: body.idUser,
+            idTour: body.idTour,
+            finalpayment: finalpayment,
+        });
 
         await bookTour.save();
 
@@ -122,7 +143,7 @@ exports.getUserBookTourAsync = async (id) => {
         console.log(id);
         const listBookTour = await BOOKTOUR.find({ idUser: id });
         console.log(listBookTour.length);
-        console.log(listBookTour[0]._id);
+        //console.log(listBookTour[0]._id);
         if (listBookTour == null) {
             return {
                 message: "Dont have BookTour",
@@ -135,7 +156,23 @@ exports.getUserBookTourAsync = async (id) => {
             for (let i = 0; i < listBookTour.length; i++) {
                 console.log(listBookTour[i].idTour);
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
-                data.push(tour);
+                var result = {
+                    idEnterprise: tour.idEnterprise,
+                    idVehicles: tour.idVehicles,
+                    name: tour.name,
+                    place: tour.place,
+                    detail: tour.detail,
+                    time: tour.time,
+                    payment: tour.payment,
+                    imagesTour: tour.imagesTour,
+                    star: tour.star,
+                    category: tour.category,
+                    status: listBookTour[i].status,
+                    idTour: listBookTour[i].idUser,
+                    idUser: listBookTour[i].idTour,
+                    finalpayment: listBookTour[i].finalpayment,
+                };
+                data.push(result);
             }
             return {
                 message: "Successfully get user BookTour",

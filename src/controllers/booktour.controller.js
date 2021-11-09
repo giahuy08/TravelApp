@@ -1,5 +1,6 @@
 const controller = require("./controller");
-const bookTourServices = require("../services/BookTour.service");
+const bookTourServices = require("../services/bookTour.service");
+const { defaultBookTour } = require('../config/defineModel');
 const tourServices = require("../services/tour.service");
 const historyServices = require("../services/history.service");
 const TOUR = require("../models/Tour.model");
@@ -17,13 +18,13 @@ exports.bookTourAsync = async (req, res, next) => {
             return controller.sendSuccess(res, null, 404, "Tour does not exist");
         }
         var resServices;
-        const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: idTour });
-        //console.log(booktour);
+        const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: idTour, status: defaultBookTour.AWAIT});
+        console.log(booktour);
         if (booktour == null) {
             resServices = await bookTourServices.bookTourAsync(req.value.body);
         } else {
-            if (booktour.status != 0) {
-                resServices = await bookTourServices.rebookTourAsync(req.value.body);
+            if (booktour.status != defaultBookTour.AWAIT ) {
+                resServices = await bookTourServices.bookTourAsync(req.value.body);   
             }
             else {
                 return controller.sendSuccess(res, null, 300, "The tour is already booked");

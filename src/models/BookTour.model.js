@@ -8,6 +8,7 @@ const BookTour = new Schema(
     idUser: defaultModel.string,
     idTour: defaultModel.string,
     status: defaultModel.number,
+    finalpayment: defaultModel.number,
   },
   { timestamps: true }
 );
