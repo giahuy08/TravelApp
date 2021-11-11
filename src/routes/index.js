@@ -27,6 +27,6 @@ router.use('/booktour', booktourRoute)
 
 
 
-router.get('/healCheckw', (req, res) => res.status(200).send('Welcome to FreshFood'))
+router.get('/healCheckw', (req, res) => res.status(200).send('Welcome to TravelAround'))
 
 module.exports = router

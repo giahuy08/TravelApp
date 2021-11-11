@@ -1,8 +1,6 @@
 const controller = require("./controller");
 const bookTourServices = require("../services/bookTour.service");
 const { defaultBookTour } = require('../config/defineModel');
-const tourServices = require("../services/tour.service");
-const historyServices = require("../services/history.service");
 const TOUR = require("../models/Tour.model");
 const BOOKTOUR = require("../models/BookTour.model");
 const USER = require("../models/User.model");
@@ -13,25 +11,14 @@ exports.bookTourAsync = async (req, res, next) => {
         req.value.body.idUser = userId;
         const idTour = req.value.body.idTour;
         var tour = await TOUR.findOne({ _id: idTour });
-
         if (tour == null) {
             return controller.sendSuccess(res, null, 404, "Tour does not exist");
         }
-        var resServices;
-        const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: idTour, status: defaultBookTour.AWAIT});
-        console.log(booktour);
-        if (booktour == null) {
-            resServices = await bookTourServices.bookTourAsync(req.value.body);
-        } else {
-            if (booktour.status != defaultBookTour.AWAIT ) {
-                resServices = await bookTourServices.bookTourAsync(req.value.body);   
-            }
-            else {
-                return controller.sendSuccess(res, null, 300, "The tour is already booked");
-            }
-
+        const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: idTour, status: defaultBookTour.AWAIT });
+        if (booktour != null) {
+            return controller.sendSuccess(res, null, 300, "The tour is already booked");
         }
-
+        const resServices = await bookTourServices.bookTourAsync(req.value.body);
         if (resServices.success) {
             return controller.sendSuccess(
                 res,
@@ -201,10 +188,13 @@ exports.getOneBookTourAsync = async (req, res, next) => {
 
 exports.getUserBookTourAsync = async (req, res, next) => {
     try {
+        let query = {
+            limit: req.query.limit || '15',
+            skip: req.query.skip || '1',
+        };
         const { decodeToken } = req.value.body;
         const userId = decodeToken.data.id;
-        console.log(userId);
-        const resServices = await bookTourServices.getUserBookTourAsync(userId);
+        const resServices = await bookTourServices.getUserBookTourAsync(userId, query);
         if (resServices.success) {
             return controller.sendSuccess(
                 res,
