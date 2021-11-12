@@ -17,13 +17,34 @@ exports.getOneDiscountAsync = async (id) => {
         };
     }
 };
+
 exports.getAllDiscountAsync = async () => {
     try {
         const discount = await DISCOUNT.find();
+        var dataDiscount =[];
+
+
+        for(let i =0;i<discount.length;i++){
+            var tour = await TOUR.findOne({ _id: discount[i].idTour });
+
+          
+            var data ={
+                idTour:discount[i].idTour,
+                code:discount[i].code,
+                discount:discount[i].discount,
+                status:discount[i].status,
+                nameTour:tour.name
+            }
+
+             dataDiscount.push(data)
+
+
+        }
+    
         return {
             message: 'Successfully Get All Discount',
             success: true,
-            data: discount
+            data: dataDiscount
         };
     } catch (e) {
         console.log(e);
