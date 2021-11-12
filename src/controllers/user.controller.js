@@ -4,6 +4,7 @@ const { defaultRoles } = require('../config/defineModel');
 const jwtServices = require('../services/jwt.services');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
+const { UploadImage } = require("../services/uploadFirebase.service");
 
 exports.registerAsync = async (req, res, next) => {
 	try {
@@ -183,6 +184,36 @@ exports.changePasswordAsync = async (req, res, next) => {
 		const { decodeToken } = req.value.body;
 		const id = decodeToken.data.id;
 		const resServices = await userServices.changePasswordAsync(id, req.body);
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				300,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.success,
+			200,
+			resServices.message
+		);
+	} catch (error) {
+		return controller.sendError(res);
+	}
+};
+
+exports.editProfileAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
+		if (req.files["Avatar"] != null) {
+			var Image = req.files["Avatar"][0];
+			var urlImage = await UploadImage(Image.filename, "Users/" + id + "/");
+			req.value.body.avatar = urlImage;
+		}
+
+		const resServices = await userServices.editProfileAsync(id, req.value.body);
 		if (!resServices.success) {
 			return controller.sendSuccess(
 				res,
