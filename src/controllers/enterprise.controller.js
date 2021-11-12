@@ -54,8 +54,8 @@ exports.getAllEnterpriseAsync = async (req, res, next) => {
 };
 exports.createEnterpriseAsync = async (req, res, next) => {
 	try {
-		const Image = req.files["Logo"][0];
-		if (Image != null) {
+		if (req.files["Logo"] != null) {
+			const Image = req.files["Logo"][0];
 			const urlImage = await UploadImage(Image.filename, "Enterprises/");
 			req.value.body.logo = urlImage;
 		}
@@ -82,8 +82,8 @@ exports.createEnterpriseAsync = async (req, res, next) => {
 };
 exports.updateEnterpriseAsync = async (req, res, next) => {
 	try {
-		const Image = req.files["Logo"][0];
-		if (Image != null) {
+		if (req.files["Logo"] != null) {
+			const Image = req.files["Logo"][0];
 			const urlImage = await UploadImage(Image.filename, "Enterprises/");
 			req.body.logo = urlImage;
 		}

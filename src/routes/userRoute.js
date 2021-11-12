@@ -4,7 +4,18 @@ const SchemaValidateUser = require("../validators/user.validator")
 const router = express.Router()
 const Validate = require("../validators")
 const jwtServices = require("../services/jwt.services")
-
+const path = require("path");
+var multer = require("multer");
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/");
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.fieldname + "-" + Date.now() + Math.floor(Math.random() * 100) + path.extname(file.originalname));
+    },
+  });
+const upload = multer({ storage: storage });
+var cpUpload = upload.fields([{ name: 'Avatar', maxCount: 100 }]);
 
 
 
@@ -15,6 +26,7 @@ router.post('/changePassword', jwtServices.verify, Validate.body(SchemaValidateU
 router.get('/forgotPassword', Controller.forgotPasswordAsync)
 router.post('/resetPassword',Validate.body(SchemaValidateUser.resetPassword), Controller.resetPasswordAsync)
 router.get('/findUserByToken', jwtServices.verify, Controller.findUserByTokenAsync)
+router.put('/editProfile', cpUpload, jwtServices.verify, Validate.body(SchemaValidateUser.editProfile), Controller.editProfileAsync)
 
 
 
