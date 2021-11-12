@@ -6,28 +6,34 @@ const DISCOUNT = require('../models/Discount.model');
 exports.bookTourAsync = async (body) => {
     try {
         var tour = await TOUR.findOne({ _id: body.idTour });
-        var discount = await DISCOUNT.findOne({code: body.codediscount});
-        if(discount == null)
-        {
-            return {
-                message: "Code Discount doesn't exist",
-                success: false,
-            };
-        }
-        if(body.codediscount == null)
-        {
-            const bookTour = new BOOKTOUR(body);
+        var discount = await DISCOUNT.findOne({ code: body.codediscount });
+        var bookTour;
+        if (body.codediscount == null) {
+            bookTour = new BOOKTOUR({
+                idUser: body.idUser,
+                idTour: body.idTour,
+                finalpayment: tour.payment,
+            });
             await bookTour.save();
         }
-        var finalpayment = ((tour.payment * discount.discount)/100);
-        
-        const bookTour = new BOOKTOUR({
-            idUser: body.idUser,
-            idTour: body.idTour,
-            finalpayment: finalpayment,
-        });
+        else {
 
-        await bookTour.save();
+            if (discount == null) {
+                return {
+                    message: "Code Discount doesn't exist",
+                    success: false,
+                };
+            }
+            var finalpayment = ((tour.payment * discount.discount) / 100);
+            bookTour = new BOOKTOUR({
+                idUser: body.idUser,
+                idTour: body.idTour,
+                finalpayment: finalpayment,
+            });
+
+            await bookTour.save();
+        }
+
 
         return {
             message: "Successfully Book Tour",
@@ -138,12 +144,10 @@ exports.getAllBookTourAsync = async () => {
     }
 };
 
-exports.getUserBookTourAsync = async (id) => {
+exports.getUserBookTourAsync = async (id, body) => {
     try {
-        console.log(id);
-        const listBookTour = await BOOKTOUR.find({ idUser: id });
-        console.log(listBookTour.length);
-        //console.log(listBookTour[0]._id);
+        const { skip, limit } = body;
+        const listBookTour = await BOOKTOUR.find({ idUser: id }).sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         if (listBookTour == null) {
             return {
                 message: "Dont have BookTour",
@@ -151,10 +155,8 @@ exports.getUserBookTourAsync = async (id) => {
             };
         }
         else {
-
             var data = [];
             for (let i = 0; i < listBookTour.length; i++) {
-                console.log(listBookTour[i].idTour);
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
                 var result = {
                     idEnterprise: tour.idEnterprise,
