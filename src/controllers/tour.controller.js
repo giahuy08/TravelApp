@@ -33,6 +33,7 @@ exports.getOneTourAsync = async (req, res, next) => {
 exports.getAllTourAsync = async (req, res, next) => {
 	try {
 		let query = {
+		
 			limit: req.query.limit || '15',
 			skip: req.query.skip || '1',
 		};
@@ -222,7 +223,12 @@ exports.deleteForceTourAsync = async (req, res, next) => {
 
 exports.findTourByNameAsync = async (req, res, next) => {
 	try {
-		const resServices = await tourServices.findTourByNameAsync(req.query.name);
+		let query = {
+			name:req.query.name||'',
+			limit: req.query.limit || '15',
+			skip: req.query.skip || '1',
+		};
+		const resServices = await tourServices.findTourByNameAsync(query);
 		if (resServices.success) {
 			return controller.sendSuccess(
 				res,

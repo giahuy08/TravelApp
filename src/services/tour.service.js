@@ -109,10 +109,12 @@ exports.deleteForceTourAsync = async (id) => {
     }
 };
 
-exports.findTourByNameAsync = async (name) => {
+exports.findTourByNameAsync = async (body) => {
     try {
-        var nameRegex = new RegExp(name)
-        const tour = await TOUR.find({name :{$regex: nameRegex, $options: 'i'}});
+      
+        var nameRegex = new RegExp(body.name)
+        const tour = await TOUR.find({name :{$regex: nameRegex, $options: 'i'}}).sort({createdAt: -1}).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
+        console.log(tour.length)
         if(tour.length==0){
             return {
                 message: 'Dont find tour',
@@ -120,7 +122,7 @@ exports.findTourByNameAsync = async (name) => {
             };
         }
         return {
-            message: 'Successfully Get One Tour',
+            message: 'Successfully Get Tour',
             success: true,
             data: tour
         };
