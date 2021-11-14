@@ -209,7 +209,7 @@ exports.changePasswordAsync = async (id, body) => {
 exports.fotgotPassword = async body => {
 	try {
 		const email = body.email;
-		var otp = await otpGenerator.generate(6, {
+		var otp = await otpGenerator.generate(4, {
 			upperCase: false,
 			specialChars: false
 		});
@@ -282,16 +282,17 @@ exports.fotgotPassword = async body => {
 exports.resetPassword = async body => {
 	try {
 		const { otp, password, email } = body;
+		
 		let user = await USER.findOne({ email: email });
 		if (user != null) {
 			if (otp == user.otp) {
 				const hashedPassword = await bcrypt.hash(password, 8);
-				const otp = otpGenerator.generate(6, {
-					upperCase: false,
-					specialChars: false
-				});
+				// const otp = otpGenerator.generate(6, {
+				// 	upperCase: false,
+				// 	specialChars: false
+				// });
 				user.password = hashedPassword;
-				user.otp = otp;
+				user.otp = '';
 				user.save();
 				return {
 					message: 'Reset Password success',
