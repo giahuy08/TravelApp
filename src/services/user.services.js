@@ -70,6 +70,23 @@ exports.editProfileAsync = async (id, body) => {
 	}
 };
 
+exports.updateAvatarAsync = async (id, body) => {
+	try {
+		const user = await USER.findOneAndUpdate({ _id: id }, body, { new: true });
+		return {
+			message: 'Update Avatar Successfully',
+			success: true,
+			data: user
+		};
+	} catch (error) {
+		console.log(error);
+		return {
+			message: 'An error occurred',
+			success: false
+		};
+	}
+};
+
 exports.registerAdminAsync = async body => {
 	try {
 		const { email, password, phone, name, address } = body;

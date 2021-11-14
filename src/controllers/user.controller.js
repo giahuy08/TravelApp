@@ -207,13 +207,38 @@ exports.editProfileAsync = async (req, res, next) => {
 	try {
 		const { decodeToken } = req.value.body;
 		const id = decodeToken.data.id;
+		console.log(req.value.body)
+		const resServices = await userServices.editProfileAsync(id, req.value.body);
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				300,
+				resServices.message
+			);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.success,
+			200,
+			resServices.message
+		);
+	} catch (error) {
+		return controller.sendError(res);
+	}
+};
+
+exports.updateAvatarAsync = async (req, res, next) => {
+	try {
+		const { decodeToken } = req.value.body;
+		const id = decodeToken.data.id;
 		if (req.files["Avatar"] != null) {
 			var Image = req.files["Avatar"][0];
 			var urlImage = await UploadImage(Image.filename, "Users/" + id + "/");
 			req.value.body.avatar = urlImage;
 		}
 
-		const resServices = await userServices.editProfileAsync(id, req.value.body);
+		const resServices = await userServices.updateAvatarAsync(id, req.value.body);
 		if (!resServices.success) {
 			return controller.sendSuccess(
 				res,

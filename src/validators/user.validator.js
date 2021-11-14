@@ -24,6 +24,8 @@ const schemas = {
 		name: joi.string(),
 		address:joi.string(),
 		phone:joi.string(),
+	}),
+	updateAvatar:joi.object().keys({
 		avatar:joi.string(),
 	}),
 };
