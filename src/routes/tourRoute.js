@@ -29,7 +29,7 @@ router.delete('/deleteForceTour',jwtServices.verify, checkRole([defaultRoles.Adm
 router.get('/findTourByName', Controller.findTourByNameAsync)
 router.get('/findTourByCategory', Controller.findTourByCategoryAsync)
 router.get('/findAllTourByCategory', Controller.findAllTourByCategoryAsync)
-
+router.get('/getPageNumbers', Controller.getPageNumbersAsync)
 
 
 
