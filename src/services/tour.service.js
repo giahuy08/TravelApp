@@ -21,8 +21,6 @@ exports.getOneTourAsync = async (id) => {
 exports.getAllTourAsync = async body => {
     try {
         const { skip, limit } = body;
-        //const alltour = await TOUR.find();
-        //var pages = Math.ceil(alltour.length / Number(limit));
         const tour = await TOUR.find().sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All Tour',
@@ -113,9 +111,23 @@ exports.deleteForceTourAsync = async (id) => {
 
 exports.findTourByNameAsync = async (body) => {
     try {
+        var tour = [];
+        var nameRegex = new RegExp(body.name);
+        console.log(body.category);
+        if(body.name =='')
+        {
+            tour = await TOUR.find({ category: body.category }).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
+        }
+        if(body.category =='')
+        {
+            tour = await TOUR.find({ name: { $regex: nameRegex, $options: 'i' }}).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit)); 
+        }
+        if(body.category !='' && body.name !='')
+        { 
+            tour = await TOUR.find({ name: { $regex: nameRegex, $options: 'i' }, category: body.category }).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
+        }
+       
 
-        var nameRegex = new RegExp(body.name)
-        const tour = await TOUR.find({ name: { $regex: nameRegex, $options: 'i' } }).sort({ createdAt: -1 }).skip(Number(body.limit) * Number(body.skip) - Number(body.limit)).limit(Number(body.limit));
         console.log(tour.length)
         if (tour.length == 0) {
             return {

@@ -225,6 +225,7 @@ exports.findTourByNameAsync = async (req, res, next) => {
 	try {
 		let query = {
 			name:req.query.name||'',
+			category: req.query.category || '',
 			limit: req.query.limit || '15',
 			skip: req.query.skip || '1',
 		};
