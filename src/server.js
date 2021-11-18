@@ -2,6 +2,7 @@ const express = require('express')
 const { configEnv } = require('./config')
 const app = express()
 const db = require('./config/db')
+const paypal = require('./config/paypal')
 const route = require('./routes/index')
 const morgan = require("morgan")
 const cookieParser = require("cookie-parser")
@@ -19,6 +20,9 @@ const PORT = process.env.PORT || 5000;
 
 //connect db
 db.connect()
+
+// Connect to paypal
+paypal.connect(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
 
 app.use(express.urlencoded({
     extended: true

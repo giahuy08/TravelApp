@@ -10,6 +10,8 @@ const hotelroomRoute = require('./hotelroomRoute')
 const historyRoute = require('./historyRoute')
 const restauranttableRoute = require('./restauranttableRoute')
 const booktourRoute = require('./booktourRoute')
+const paymentRoute = require('./paymentRoute')
+const vnpaymentRoute = require('./vnpaymentRoute')
 
 const router = express.Router()
 router.use('/user', useRoute)
@@ -23,6 +25,8 @@ router.use('/restauranttable', restauranttableRoute)
 router.use('/uploadfile', uploadfileRoute) //Test
 router.use('/history', historyRoute)
 router.use('/booktour', booktourRoute)
+router.use('/payment', paymentRoute)
+router.use('vnpayment', vnpaymentRoute)
 
 
 
