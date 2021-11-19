@@ -26,7 +26,7 @@ router.use('/uploadfile', uploadfileRoute) //Test
 router.use('/history', historyRoute)
 router.use('/booktour', booktourRoute)
 router.use('/payment', paymentRoute)
-router.use('vnpayment', vnpaymentRoute)
+router.use('/vnpayment', vnpaymentRoute)
 
 
 
