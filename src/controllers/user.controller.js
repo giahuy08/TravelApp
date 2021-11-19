@@ -257,3 +257,27 @@ exports.updateAvatarAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
+exports.verifyUserAsync = async (req, res, next) => {
+	try {
+		const resServices = await userServices.verifyUser(req.value.body);
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				300,
+				resServices.message
+			);
+		}
+
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+	} catch (error) {
+		console.log(error);
+		return controller.sendError(res);
+	}
+};

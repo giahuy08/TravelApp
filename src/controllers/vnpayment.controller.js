@@ -78,10 +78,8 @@ exports.getVNPayReturn = async (req, res, next) => {
     delete vnp_Params['vnp_SecureHashType'];
 
     vnp_Params = sortObject(vnp_Params);
-
-    var config = require('config');
-    var tmnCode = config.get('vnp_TmnCode');
-    var secretKey = config.get('vnp_HashSecret');
+    var tmnCode = 'I9MOQNMX';
+    var secretKey = 'RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX';
 
     var querystring = require('qs');
     var signData = querystring.stringify(vnp_Params, { encode: false });
@@ -91,10 +89,11 @@ exports.getVNPayReturn = async (req, res, next) => {
 
     if(secureHash === signed){
         //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
-
-        res.render('success', {code: vnp_Params['vnp_ResponseCode']})
+        res.status(200).json({ code: vnp_Params['vnp_ResponseCode'], data: req.query})
+        //res.render('success', {code: vnp_Params['vnp_ResponseCode']})
     } else{
-        res.render('success', {code: '97'})
+        res.status(200).json({ code: '97', data: req.query})
+        //res.render('success', {code: '97'})
     }
 };
 exports.getVNPayIPN = async (req, res, next) => {
@@ -105,8 +104,8 @@ exports.getVNPayIPN = async (req, res, next) => {
     delete vnp_Params['vnp_SecureHashType'];
 
     vnp_Params = sortObject(vnp_Params);
-    var config = require('config');
-    var secretKey = config.get('vnp_HashSecret');
+    var tmnCode = 'I9MOQNMX';
+    var secretKey = 'RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX';
     var querystring = require('qs');
     var signData = querystring.stringify(vnp_Params, { encode: false });
     var crypto = require("crypto");     

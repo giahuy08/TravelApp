@@ -42,7 +42,8 @@ exports.registerUserAsync = async body => {
 			success: true,
 			data: generateToken,
 			email: email,
-			otp: otp
+			otp: otp,
+			role: newUser.role
 		};
 	} catch (err) {
 		console.log(err);
@@ -150,6 +151,12 @@ exports.loginAsync = async body => {
 				success: false
 			};
 		}
+		if (user.verify == false) {
+			return {
+				message: 'Unverified Account !!',
+				success: false
+			};
+		}
 		console.log(user);
 		const generateToken = jwtServices.createToken({
 			id: user._id,
@@ -161,7 +168,8 @@ exports.loginAsync = async body => {
 			message: 'Successfully login',
 			success: true,
 			data: {
-				token: generateToken
+				token: generateToken,
+				user: user
 			}
 		};
 	} catch (err) {
@@ -299,7 +307,7 @@ exports.fotgotPassword = async body => {
 exports.resetPassword = async body => {
 	try {
 		const { otp, password, email } = body;
-		
+
 		let user = await USER.findOne({ email: email });
 		if (user != null) {
 			if (otp == user.otp) {
@@ -344,5 +352,39 @@ exports._findAdminByRoleAsync = async () => {
 	} catch (err) {
 		console.log(err);
 		return null;
+	}
+};
+
+exports.verifyUser = async body => {
+	try {
+		const { otp, email } = body;
+
+		let user = await USER.findOne({ email: email });
+		if (user != null) {
+			if (otp == user.otp) {	
+				user.verify = true;
+				user.otp = '';
+				user.save();
+				return {
+					message: 'Account Verification Successful',
+					success: true
+				};
+			} else {
+				return {
+					message: 'OTP invalid',
+					success: false
+				};
+			}
+		} else {
+			return {
+				message: 'Do not Email',
+				success: false
+			};
+		}
+	} catch (error) {
+		return {
+			message: 'An error occurred',
+			success: false
+		};
 	}
 };

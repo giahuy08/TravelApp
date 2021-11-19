@@ -12,6 +12,7 @@ const restauranttableRoute = require('./restauranttableRoute')
 const booktourRoute = require('./booktourRoute')
 const paymentRoute = require('./paymentRoute')
 const vnpaymentRoute = require('./vnpaymentRoute')
+const adminRoute = require('./adminRouter')
 
 const router = express.Router()
 router.use('/user', useRoute)
@@ -27,6 +28,7 @@ router.use('/history', historyRoute)
 router.use('/booktour', booktourRoute)
 router.use('/payment', paymentRoute)
 router.use('/vnpayment', vnpaymentRoute)
+router.use('/admin', adminRoute)
 
 
 

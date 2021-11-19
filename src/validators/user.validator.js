@@ -28,6 +28,10 @@ const schemas = {
 	updateAvatar:joi.object().keys({
 		avatar:joi.string(),
 	}),
+	verifyUser:joi.object().keys({
+		email: joi.string().required(),
+		otp:joi.string().required()
+	}),
 };
 module.exports = schemas;
 

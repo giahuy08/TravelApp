@@ -28,7 +28,7 @@ router.post('/resetPassword',Validate.body(SchemaValidateUser.resetPassword), Co
 router.get('/findUserByToken', jwtServices.verify, Controller.findUserByTokenAsync)
 router.put('/editProfile', jwtServices.verify, Validate.body(SchemaValidateUser.editProfile), Controller.editProfileAsync)
 router.put('/updateAvatar', cpUpload, jwtServices.verify, Validate.body(SchemaValidateUser.updateAvatar), Controller.updateAvatarAsync)
-
+router.post('/verifyUser', Validate.body(SchemaValidateUser.verifyUser), Controller.verifyUserAsync)
 
 
 
