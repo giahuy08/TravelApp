@@ -6,7 +6,7 @@ const DISCOUNT = require('../models/Discount.model');
 exports.bookTourAsync = async (body) => {
     try {
         var tour = await TOUR.findOne({ _id: body.idTour });
-        var discount = await DISCOUNT.findOne({ code: body.codediscount });
+        var discount = await DISCOUNT.findOne({ code: body.codediscount,idTour:body.idTour });
         var bookTour;
         if (body.codediscount == null) {
             bookTour = new BOOKTOUR({
