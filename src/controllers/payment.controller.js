@@ -1,7 +1,7 @@
 const paypal = require("paypal-rest-sdk");
 
  exports.Order =  async (req, res, next) => {
-    const { price, name, idtour } = req.body;
+    const { price, name } = req.body;
     console.log(req.body);
     const create_payment_json = {
       intent: "sale",
