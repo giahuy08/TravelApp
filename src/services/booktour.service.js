@@ -8,7 +8,7 @@ exports.bookTourAsync = async (body) => {
         var tour = await TOUR.findOne({ _id: body.idTour });
         var discount = await DISCOUNT.findOne({ code: body.codediscount,idTour:body.idTour });
         var bookTour;
-        if (body.codediscount == null) {
+        if (body.codediscount == null   ) {
             bookTour = new BOOKTOUR({
                 idUser: body.idUser,
                 idTour: body.idTour,
