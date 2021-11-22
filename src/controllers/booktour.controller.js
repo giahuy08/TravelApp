@@ -164,7 +164,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
           var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
           // var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}`;
-          var returnUrl = `http://localhost:3000/bill?idUser=${userId}&idTour=${idTour}`;
+          var returnUrl = `http://localhost:3000/bill/paymentVNPay?idUser=${userId}&idTour=${idTour}`;
 
           var date = new Date();
 
