@@ -10,8 +10,8 @@ const schemas = {
     }),
     updateUser: joi.object().keys({
         id:joi.string().required(),
-        email: joi.string(),
-		password: joi.string(),
+        email: joi.string().allow(''),
+		password: joi.string().allow(''),
 		phone:joi.string(),
 		name:joi.string(),
 		address:joi.string(),

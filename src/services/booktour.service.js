@@ -1,17 +1,19 @@
-const { defaultBookTour } = require('../config/defineModel');
+const { defaultBookTour, defaultStatusPayment, defaultPayment } = require('../config/defineModel');
 const BOOKTOUR = require("../models/BookTour.model");
 const TOUR = require("../models/Tour.model");
 const DISCOUNT = require('../models/Discount.model');
+const paypal = require("paypal-rest-sdk");
 
 exports.bookTourAsync = async (body) => {
     try {
         var tour = await TOUR.findOne({ _id: body.idTour });
-        var discount = await DISCOUNT.findOne({ code: body.codediscount,idTour:body.idTour });
+        var discount = await DISCOUNT.findOne({ code: body.codediscount, idTour: body.idTour });
         var bookTour;
         if (body.codediscount == null   ) {
             bookTour = new BOOKTOUR({
                 idUser: body.idUser,
                 idTour: body.idTour,
+                idPay: "Chưa thanh toán",
                 finalpayment: tour.payment,
             });
             await bookTour.save();
@@ -24,10 +26,11 @@ exports.bookTourAsync = async (body) => {
                     success: false,
                 };
             }
-            var finalpayment = ((tour.payment * discount.discount) / 100);
+            var finalpayment = tour.payment - ((tour.payment * discount.discount) / 100);
             bookTour = new BOOKTOUR({
                 idUser: body.idUser,
                 idTour: body.idTour,
+                idPay: "Chưa thanh toán",
                 finalpayment: finalpayment,
             });
 
@@ -47,6 +50,7 @@ exports.bookTourAsync = async (body) => {
         };
     }
 };
+
 
 exports.rebookTourAsync = async (body) => {
     try {
@@ -207,3 +211,19 @@ exports.getOneBookTourAsync = async (id) => {
         };
     }
 };
+
+function sortObject(obj) {
+	var sorted = {};
+	var str = [];
+	var key;
+	for (key in obj){
+		if (obj.hasOwnProperty(key)) {
+		str.push(encodeURIComponent(key));
+		}
+	}
+	str.sort();
+    for (key = 0; key < str.length; key++) {
+        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
+    }
+    return sorted;
+}

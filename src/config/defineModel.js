@@ -61,6 +61,11 @@ const defaultBookTour = {
   COMPLETE:1,
   CANCEL:2
 }
+const defaultPayment={
+  COD:0,
+  PayPal:1, 
+  VNPay:2,
+}
 
 module.exports ={
   defaultModel,
@@ -71,5 +76,6 @@ module.exports ={
   defaultChatSocket,
   defaultStatusPayment,
   defaultCategoryTour,
-  defaultBookTour
+  defaultBookTour,
+  defaultPayment
 }
