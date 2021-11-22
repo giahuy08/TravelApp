@@ -16,8 +16,8 @@ exports.paymentMethod = async (name, price, idUser, idTour, next) => {
     },
     redirect_urls: {
       // return_url: `http://localhost:5000/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
-      return_url: `http://localhost:3000/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
-      cancel_url: "http://localhost:5000/payment/cancel",
+      return_url: `https://app-travelbe.herokuapp.com/booktour/paymentPayPal?price=${price}&idUser=${idUser}&idTour=${idTour}`,
+      cancel_url: "https://app-travelbe.herokuapp.com/payment/cancel",
     },
     transactions: [
       {
