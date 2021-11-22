@@ -1,5 +1,5 @@
 const controller = require("./controller");
-const bookTourServices = require("../services/bookTour.service");
+const bookTourServices = require("../services/booktour.service");
 const {
   defaultBookTour,
   defaultStatusPayment,

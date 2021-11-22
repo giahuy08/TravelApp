@@ -1,6 +1,5 @@
 const controller = require('./controller');
-const tourServices = require('../services/Tour.service');
-const userServices = require('../services/user.services');
+const tourServices = require('../services/tour.service');
 const { defaultTours } = require('../config/defineModel');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
