@@ -36,7 +36,7 @@ exports.getAllReviewTourAsync = async () => {
 };
 exports.getReviewOfTourAsync = async (idTour) => {
     try {
-        const reviewTour = await REVIEWTOUR.find({ key: idTour });
+        const reviewTour = await REVIEWTOUR.find({ idTour: idTour });
         return {
             message: 'Successfully Get All ReviewTour',
             success: true,
