@@ -35,23 +35,20 @@ exports.getAllReviewTourAsync = async () => {
   }
 };
 exports.getReviewOfTourAsync = async (idTour) => {
-  try {
-    const reviewTour = await REVIEWTOUR.find({ key: idTour });
-    
-    // console.log(dataReview.length)
- 
-    return {
-      message: "Successfully Get All ReviewTour",
-      success: true,
-      data: reviewTour,
-    };
-  } catch (e) {
-    console.log(e);
-    return {
-      message: "An error occurred",
-      success: false,
-    };
-  }
+    try {
+        const reviewTour = await REVIEWTOUR.find({ idTour: idTour });
+        return {
+            message: 'Successfully Get All ReviewTour',
+            success: true,
+            data: reviewTour
+        };
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
 };
 exports.createReviewTourAsync = async (body) => {
   try {

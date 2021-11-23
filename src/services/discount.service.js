@@ -56,7 +56,7 @@ exports.getAllDiscountAsync = async () => {
 };
 exports.getDiscountOfTourAsync = async (idTour) => {
     try {
-        const discount = await DISCOUNT.find({ key: idTour });
+        const discount = await DISCOUNT.find({ idTour: idTour });
         return {
             message: 'Successfully Get Discount Of Tour',
             success: true,
