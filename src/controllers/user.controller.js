@@ -113,6 +113,24 @@ exports.loginAsync = async (req, res, next) => {
 	}
 };
 
+exports.loginAdminAsync = async (req, res, next) => {
+	try {
+		const resServices = await userServices.loginAdminAsync(req.value.body);
+		if (!resServices.success) {
+			return controller.sendSuccess(res, {}, 300, resServices.message);
+		}
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+	} catch (err) {
+		console.log(err);
+		return controller.sendError(res);
+	}
+};
+
 exports.forgotPasswordAsync = async (req, res, next) => {
 	try {
 		const { email } = req.query;

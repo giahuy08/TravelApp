@@ -130,14 +130,67 @@ exports.registerAdminAsync = async body => {
 	}
 };
 
-
-
 exports.loginAsync = async body => {
 	try {
 		const { email, password } = body;
 		const user = await USER.findOne({
 			email: email
 		});
+		if (!user) {
+			return {
+				message: 'Invalid Email !!',
+				success: false
+			};
+		}
+		const isPasswordMatch = await bcrypt.compare(password, user.password);
+		if (!isPasswordMatch) {
+			return {
+				message: 'Invalid password !!',
+				success: false
+			};
+		}
+		if (user.verify == false) {
+			return {
+				message: 'Unverified Account !!',
+				success: false
+			};
+		}
+		console.log(user);
+		const generateToken = jwtServices.createToken({
+			id: user._id,
+			role: user.role
+		});
+		console.log(generateToken);
+
+		return {
+			message: 'Successfully login',
+			success: true,
+			data: {
+				token: generateToken,
+				user: user
+			}
+		};
+	} catch (err) {
+		console.log(err);
+		return {
+			message: 'An error occurred',
+			success: false
+		};
+	}
+};
+
+exports.loginAdminAsync = async body => {
+	try {
+		const { email, password } = body;
+		const user = await USER.findOne({
+			email: email
+		});
+		if(user.role != defaultRoles.Admin) {
+			return {
+				message: 'Verify Role Failed',
+				success: false
+			};
+		}
 		if (!user) {
 			return {
 				message: 'Invalid Email !!',
