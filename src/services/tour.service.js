@@ -21,6 +21,7 @@ exports.getOneTourAsync = async (id) => {
 exports.getAllTourAsync = async body => {
     try {
         const { skip, limit } = body;
+    
         const tour = await TOUR.find().sort({ createdAt: -1 }).skip(Number(limit) * Number(skip) - Number(limit)).limit(Number(limit));
         return {
             message: 'Successfully Get All Tour',

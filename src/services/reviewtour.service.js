@@ -35,20 +35,38 @@ exports.getAllReviewTourAsync = async () => {
   }
 };
 exports.getReviewOfTourAsync = async (idTour) => {
-    try {
-        const reviewTour = await REVIEWTOUR.find({ idTour: idTour });
-        return {
-            message: 'Successfully Get All ReviewTour',
-            success: true,
-            data: reviewTour
-        };
-    } catch (e) {
-        console.log(e);
-        return {
-            message: 'An error occurred',
-            success: false
-        };
+  try {
+    const reviewTour = await REVIEWTOUR.find({ idTour: idTour });
+    var dataReview = [];
+    for(let i =0 ;i<reviewTour.length; i++){
+        var infoUser = await USER.findOne({_id: reviewTour[i].idUser})
+        var data = {
+          star: reviewTour[i].star,
+          comment:  reviewTour[i].comment,
+          imagesReview: reviewTour[i].imagesReview ,
+          status:  reviewTour[i].status,
+         _id:  reviewTour[i]._id,
+          idTour:  reviewTour[i].idTour,
+          idUser:  reviewTour[i].idUser,
+          createdAt:  reviewTour[i].createAt,
+          nameUser: infoUser.name,
+          avatar:infoUser.avatar
+        }
+        dataReview.push(data)
     }
+    console.log(reviewTour.length)
+    return {
+      message: "Successfully Get All ReviewTour",
+      success: true,
+      data: dataReview,
+    };
+  } catch (e) {
+    console.log(e);
+    return {
+      message: "An error occurred",
+      success: false,
+    };
+  }
 };
 exports.createReviewTourAsync = async (body) => {
   try {
