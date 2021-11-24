@@ -37,10 +37,26 @@ exports.getAllReviewTourAsync = async () => {
 exports.getReviewOfTourAsync = async (idTour) => {
     try {
         const reviewTour = await REVIEWTOUR.find({ idTour: idTour });
+        var dataReview = [];
+        for(let i =0;i< reviewTour.length;i++){
+            var user = await USER.findOne({ _id: reviewTour[i].idUser });
+            var data ={
+                star: reviewTour[i].star,
+                comment: reviewTour[i].comment,
+                imagesReview:reviewTour[i].imagesReview,
+                idTour:reviewTour[i].idTour,
+                createdAt:reviewTour[i].createdAt,
+                updatedAt:reviewTour[i].updatedAt,
+                avatarUser: user.avatar,
+                nameUser: user.name
+            }
+            dataReview.push(data)
+        }
+    
         return {
             message: 'Successfully Get All ReviewTour',
             success: true,
-            data: reviewTour
+            data: dataReview
         };
     } catch (e) {
         console.log(e);

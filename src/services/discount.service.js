@@ -23,22 +23,17 @@ exports.getAllDiscountAsync = async () => {
         const discount = await DISCOUNT.find();
         var dataDiscount =[];
 
-
         for(let i =0;i<discount.length;i++){
             var tour = await TOUR.findOne({ _id: discount[i].idTour });
-
-          
             var data ={
                 idTour:discount[i].idTour,
                 code:discount[i].code,
                 discount:discount[i].discount,
                 status:discount[i].status,
-                nameTour:tour.name
+                nameTour:tour.name,
+                imageTour:tour.imagesTour[0]
             }
-
              dataDiscount.push(data)
-
-
         }
     
         return {
