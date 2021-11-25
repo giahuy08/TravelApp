@@ -15,6 +15,8 @@ exports.bookTourAsync = async (body) => {
                 idTour: body.idTour,
                 idPay: "Chưa thanh toán",
                 finalpayment: tour.payment,
+                startDate: body.startDate,
+                endDate: body.endDate
             });
             await bookTour.save();
         }
@@ -32,6 +34,8 @@ exports.bookTourAsync = async (body) => {
                 idTour: body.idTour,
                 idPay: "Chưa thanh toán",
                 finalpayment: finalpayment,
+                startDate: body.startDate,
+                endDate: body.endDate
             });
 
             await bookTour.save();

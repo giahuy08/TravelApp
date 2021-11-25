@@ -11,6 +11,7 @@ const USER = require("../models/User.model");
 const DISCOUNT = require("../models/Discount.model");
 const paypal = require("paypal-rest-sdk");
 const { paymentMethod, sortObject } = require("../helper");
+const { start } = require("repl");
 exports.bookTourAsync = async (req, res, next) => {
   try {
     const { decodeToken } = req.value.body;
@@ -21,6 +22,17 @@ exports.bookTourAsync = async (req, res, next) => {
     if (tour == null) {
       return controller.sendSuccess(res, null, 404, "Tour does not exist");
     }
+    var numbers = [];
+    tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
+    console.log(numbers);
+    var maxInNumbers = Math.max.apply(Math, numbers);
+    console.log(maxInNumbers)
+    var startDate = req.value.body.startDate;
+    var endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + maxInNumbers);
+    req.value.body.endDate = endDate;
+    console.log(startDate);
+    console.log(endDate);
     const booktour = await BOOKTOUR.findOne({
       idUser: userId,
       idTour: idTour,
@@ -34,6 +46,7 @@ exports.bookTourAsync = async (req, res, next) => {
         "The tour is already booked"
       );
     }
+
     const resServices = await bookTourServices.bookTourAsync(req.value.body);
     if (resServices.success) {
       return controller.sendSuccess(
@@ -61,8 +74,8 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
     const userId = decodeToken.data.id;
     req.value.body.idUser = userId;
     const idTour = req.value.body.idTour;
-    var checkTour = await TOUR.findOne({ _id: idTour });
-    if (checkTour == null) {
+    var tour = await TOUR.findOne({ _id: idTour });
+    if (tour == null) {
       return controller.sendSuccess(res, null, 404, "Tour does not exist");
     }
     // const booktour = await BOOKTOUR.findOne({ idUser: userId, idTour: idTour, status: defaultBookTour.AWAIT });
@@ -70,13 +83,19 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
     //     return controller.sendSuccess(res, null, 300, "The tour is already booked");
     // }
     var discount = await DISCOUNT.findOne({
-        code: req.value.body.codediscount,
-        idTour: req.value.body.idTour,
-      });
-   
-   
-    var tour = await TOUR.findOne({ _id: req.value.body.idTour });
-   
+      code: req.value.body.codediscount,
+      idTour: req.value.body.idTour,
+    });
+
+    var numbers = [];
+    tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
+    console.log(numbers);
+    var maxInNumbers = Math.max.apply(Math, numbers);
+    console.log(maxInNumbers)
+    var startDate = req.value.body.startDate;
+    var endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + maxInNumbers);
+    req.value.body.endDate = endDate;
 
     if (req.value.body.typePayment == defaultPayment.VNPay) {
       if (req.value.body.codediscount == "") {
@@ -89,7 +108,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         var tmnCode = "I9MOQNMX";
         var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
         var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        var returnUrl = `http://localhost:3000/booktour/payment?idUser=${userId}&idTour=${idTour}`;
+        var returnUrl = `http://localhost:3000/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
         var date = new Date();
 
         var createDate =
@@ -143,10 +162,10 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
             message: "Successfully Create Payment!",
           });
       } else {
-      
+
         if (discount == null) {
-       
-        return controller.sendSuccess(
+
+          return controller.sendSuccess(
             res,
             null,
             404,
@@ -164,7 +183,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           var secretKey = "RUDDFWCFGKVHMJSVDFMWHBLIBDGHZUIX";
           var vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
           // var returnUrl = `http://localhost:5000/booktour/paymentVNPay?idUser=${userId}&idTour=${idTour}`;
-          var returnUrl = `http://localhost:3000/booktour/payment?idUser=${userId}&idTour=${idTour}`;
+          var returnUrl = `http://localhost:3000/booktour/payment?idUser=${userId}&idTour=${idTour}&startDate=${startDate}&endDate=${endDate}`;
 
           var date = new Date();
 
@@ -223,13 +242,19 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
       }
     } else if (req.value.body.typePayment == defaultPayment.PayPal) {
       var resultPayment;
+      startDate = new Date(startDate).toISOString().slice(0, 10);
+      endDate = new Date(endDate).toISOString().slice(0, 10);
       if (req.value.body.codediscount == "") {
+        console.log(startDate);
+        console.log(endDate);
         var finalpayment = (tour.payment / 23000).toFixed(1);
         paymentMethod(
           tour.name,
           finalpayment,
           userId,
           idTour,
+          startDate,
+          endDate,
           async function (error, payment) {
             if (error) {
               resultPayment = error;
@@ -250,48 +275,46 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           }
         );
       } else {
-      
-
-        
         if (discount == null) {
-            return controller.sendSuccess(
-                res,
-                null,
-                404,
-                "Code Discount doesn't exist"
-              );
+          return controller.sendSuccess(
+            res,
+            null,
+            404,
+            "Code Discount doesn't exist"
+          );
         }
-        else{
-            
-            var finalpayment = (
-              (tour.payment - (tour.payment * discount.discount) / 100) /
-              23000
-            ).toFixed(1);
-            paymentMethod(
-              tour.name,
-              finalpayment,
-              userId,
-              idTour,
-              async function (error, payment) {
-                if (error) {
-                  resultPayment = error;
-                } else {
-                  for (let i = 0; i < payment.links.length; i++) {
-                    if (payment.links[i].rel === "approval_url") {
-                      resultPayment = await payment.links[i].href;
-                      console.log(resultPayment);
-                      console.log("hello");
-                      return controller.sendSuccess(
-                        res,
-                        resultPayment,
-                        200,
-                        "success"
-                      );
-                    }
+        else {
+          var finalpayment = (
+            (tour.payment - (tour.payment * discount.discount) / 100) /
+            23000
+          ).toFixed(1);
+          paymentMethod(
+            tour.name,
+            finalpayment,
+            userId,
+            idTour,
+            startDate,
+            endDate,
+            async function (error, payment) {
+              if (error) {
+                resultPayment = error;
+              } else {
+                for (let i = 0; i < payment.links.length; i++) {
+                  if (payment.links[i].rel === "approval_url") {
+                    resultPayment = await payment.links[i].href;
+                    console.log(resultPayment);
+                    console.log("hello");
+                    return controller.sendSuccess(
+                      res,
+                      resultPayment,
+                      200,
+                      "success"
+                    );
                   }
                 }
               }
-            );
+            }
+          );
         }
       }
     } else {
@@ -313,6 +336,8 @@ exports.paymentPayPal = async (req, res, next) => {
   const price = req.query.price;
   const idUser = req.query.idUser;
   const idTour = req.query.idTour;
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
   const execute_payment_json = {
     payer_id: payerId,
     transactions: [
@@ -360,6 +385,8 @@ exports.paymentPayPal = async (req, res, next) => {
             idPay: paymentId,
             paymentStatus: defaultStatusPayment.paid,
             status: defaultBookTour.COMPLETE,
+            startDate: startDate,
+            endDate: endDate,
           });
           await resultBookTour.save();
           res.send({
@@ -376,8 +403,12 @@ exports.paymentPayPal = async (req, res, next) => {
 exports.paymentVNPay = async (req, res, next) => {
   const idUser = req.query.idUser;
   const idTour = req.query.idTour;
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
   delete req.query.idUser;
   delete req.query.idTour;
+  delete req.query.startDate;
+  delete req.query.endDate;
   var vnp_Params = req.query;
 
   var secureHash = vnp_Params["vnp_SecureHash"];
@@ -428,6 +459,8 @@ exports.paymentVNPay = async (req, res, next) => {
         idPay: id,
         paymentStatus: defaultStatusPayment.paid,
         status: defaultBookTour.COMPLETE,
+        startDate: startDate,
+        endDate: endDate,
       });
       await resultBookTour.save();
       res.send({
