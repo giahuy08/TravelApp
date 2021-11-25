@@ -38,23 +38,21 @@ exports.getReviewOfTourAsync = async (idTour) => {
   try {
     const reviewTour = await REVIEWTOUR.find({ idTour: idTour });
     var dataReview = [];
-    for(let i =0 ;i<reviewTour.length; i++){
-        var infoUser = await USER.findOne({_id: reviewTour[i].idUser})
-        var data = {
-          star: reviewTour[i].star,
-          comment:  reviewTour[i].comment,
-          imagesReview: reviewTour[i].imagesReview ,
-          status:  reviewTour[i].status,
-         _id:  reviewTour[i]._id,
-          idTour:  reviewTour[i].idTour,
-          idUser:  reviewTour[i].idUser,
-          createdAt:  reviewTour[i].createAt,
-          nameUser: infoUser.name,
-          avatar:infoUser.avatar
-        }
-        dataReview.push(data)
+    for (let i = 0; i < reviewTour.length; i++) {
+      var user = await USER.findOne({ _id: reviewTour[i].idUser });
+      var data = {
+        star: reviewTour[i].star,
+        comment: reviewTour[i].comment,
+        imagesReview: reviewTour[i].imagesReview,
+        idTour: reviewTour[i].idTour,
+        createdAt: reviewTour[i].createdAt,
+        updatedAt: reviewTour[i].updatedAt,
+        avatarUser: user.avatar,
+        nameUser: user.name,
+      };
+      dataReview.push(data);
     }
-    console.log(reviewTour.length)
+
     return {
       message: "Successfully Get All ReviewTour",
       success: true,
