@@ -181,6 +181,8 @@ exports.getUserBookTourAsync = async (id, body) => {
                     idTour: listBookTour[i].idUser,
                     idUser: listBookTour[i].idTour,
                     finalpayment: listBookTour[i].finalpayment,
+                    startDate: listBookTour[i].startDate,
+                    endDate: listBookTour[i].endDate,
                 };
                 data.push(result);
             }
@@ -215,19 +217,3 @@ exports.getOneBookTourAsync = async (id) => {
         };
     }
 };
-
-function sortObject(obj) {
-	var sorted = {};
-	var str = [];
-	var key;
-	for (key in obj){
-		if (obj.hasOwnProperty(key)) {
-		str.push(encodeURIComponent(key));
-		}
-	}
-	str.sort();
-    for (key = 0; key < str.length; key++) {
-        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
-    }
-    return sorted;
-}
