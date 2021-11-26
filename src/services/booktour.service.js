@@ -171,6 +171,7 @@ exports.getAllBookTourAsync = async () => {
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
                 var user = await USER.findOne({ _id: listBookTour[i].idUser });
                 var result = {
+
                     tour: tour,
                     user: user,
                     status: listBookTour[i].status,
@@ -179,6 +180,7 @@ exports.getAllBookTourAsync = async () => {
                     finalpayment: listBookTour[i].finalpayment,
                     startDate: listBookTour[i].startDate,
                     endDate: listBookTour[i].endDate,
+                    _id:listBookTour[i]._id,
                 };
                 data.push(result);
             }
