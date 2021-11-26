@@ -1,6 +1,7 @@
 const { defaultBookTour, defaultStatusPayment, defaultPayment } = require('../config/defineModel');
 const BOOKTOUR = require("../models/BookTour.model");
 const TOUR = require("../models/Tour.model");
+const USER = require('../models/User.model');
 const DISCOUNT = require('../models/Discount.model');
 const paypal = require("paypal-rest-sdk");
 const { CostExplorer } = require('aws-sdk');
@@ -11,7 +12,7 @@ exports.bookTourAsync = async (body) => {
         var discount = await DISCOUNT.findOne({ code: body.codediscount, idTour: body.idTour });
         var bookTour;
         var today = new Date();
-        if (body.codediscount == null ) {
+        if (body.codediscount == null) {
             bookTour = new BOOKTOUR({
                 idUser: body.idUser,
                 idTour: body.idTour,
@@ -22,8 +23,7 @@ exports.bookTourAsync = async (body) => {
             });
             await bookTour.save();
         }
-        else
-        {
+        else {
             if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
                 return {
                     message: "Code Discount doesn't exist",
@@ -100,6 +100,28 @@ exports.updateBookTourAsync = async (id, body) => {
     }
 };
 
+exports.cancelBookTourAsync = async (id) => {
+    try {
+        const bookTour = await BOOKTOUR.findOneAndUpdate(
+            { _id: id },
+            { status: defaultBookTour.CANCEL },
+            { new: true }
+        );
+        return {
+            message: 'Successfully Cancel BookTour',
+            success: true,
+            data: bookTour
+        };
+
+    } catch (e) {
+        console.log(e);
+        return {
+            message: 'An error occurred',
+            success: false
+        };
+    }
+};
+
 exports.deleteBookTourAsync = async (id) => {
     try {
         const bookTour = await BOOKTOUR.delete({ _id: id });
@@ -136,11 +158,36 @@ exports.deleteForceBookTourAsync = async (id) => {
 
 exports.getAllBookTourAsync = async () => {
     try {
-        const bookTours = await BOOKTOUR.find();
+        const listBookTour = await BOOKTOUR.find();
+        if (listBookTour == null) {
+            return {
+                message: "Dont have BookTour",
+                success: true,
+            };
+        }
+        else {
+            var data = [];
+            for (let i = 0; i < listBookTour.length; i++) {
+                var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
+                var user = await USER.findOne({ _id: listBookTour[i].idUser });
+                var result = {
+                    tour: tour,
+                    user: user,
+                    status: listBookTour[i].status,
+                    idTour: listBookTour[i].idUser,
+                    idUser: listBookTour[i].idTour,
+                    finalpayment: listBookTour[i].finalpayment,
+                    startDate: listBookTour[i].startDate,
+                    endDate: listBookTour[i].endDate,
+                };
+                data.push(result);
+            }
+
+        }
         return {
             message: "Successfully get all BookTour",
             success: true,
-            data: bookTours,
+            data: data,
         };
     } catch (e) {
         console.log(e);

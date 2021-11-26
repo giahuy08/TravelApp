@@ -163,8 +163,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           });
       } else {
         var today = new Date();
-        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) 
-        {
+        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
           return controller.sendSuccess(
             res,
             null,
@@ -276,8 +275,7 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         );
       } else {
         var today = new Date();
-        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) 
-        {
+        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
           return controller.sendSuccess(
             res,
             null,
@@ -495,6 +493,44 @@ exports.updateBookTourAsync = async (req, res, next) => {
       req.body.id,
       req.body
     );
+    if (resServices.success) {
+      return controller.sendSuccess(
+        res,
+        resServices.data,
+        200,
+        resServices.message
+      );
+    }
+    return controller.sendSuccess(
+      res,
+      resServices.data,
+      300,
+      resServices.message
+    );
+  } catch (error) {
+    // bug
+    console.log(error);
+    return controller.sendError(res);
+  }
+};
+
+exports.cancelBookTourAsync = async (req, res, next) => {
+  try {
+    const { decodeToken } = req.value.body;
+    const userId = decodeToken.data.id;
+    const booktour = await BOOKTOUR.findOne({
+      _id: req.query.id,
+    });
+    if (userId != booktour.idUser) {
+      return controller.sendSuccess(
+        res,
+        false,
+        401,
+        'Check Owner Fail!'
+      );
+    }
+
+    const resServices = await bookTourServices.cancelBookTourAsync(req.query.id);
     if (resServices.success) {
       return controller.sendSuccess(
         res,
