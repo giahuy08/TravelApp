@@ -3,13 +3,15 @@ const BOOKTOUR = require("../models/BookTour.model");
 const TOUR = require("../models/Tour.model");
 const DISCOUNT = require('../models/Discount.model');
 const paypal = require("paypal-rest-sdk");
+const { CostExplorer } = require('aws-sdk');
 
 exports.bookTourAsync = async (body) => {
     try {
         var tour = await TOUR.findOne({ _id: body.idTour });
         var discount = await DISCOUNT.findOne({ code: body.codediscount, idTour: body.idTour });
         var bookTour;
-        if (body.codediscount == null   ) {
+        var today = new Date();
+        if (body.codediscount == null ) {
             bookTour = new BOOKTOUR({
                 idUser: body.idUser,
                 idTour: body.idTour,
@@ -20,9 +22,9 @@ exports.bookTourAsync = async (body) => {
             });
             await bookTour.save();
         }
-        else {
-
-            if (discount == null) {
+        else
+        {
+            if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
                 return {
                     message: "Code Discount doesn't exist",
                     success: false,
@@ -37,11 +39,8 @@ exports.bookTourAsync = async (body) => {
                 startDate: body.startDate,
                 endDate: body.endDate
             });
-
             await bookTour.save();
         }
-
-
         return {
             message: "Successfully Book Tour",
             success: true,
