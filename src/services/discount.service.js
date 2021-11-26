@@ -29,6 +29,8 @@ exports.getAllDiscountAsync = async () => {
                 idTour:discount[i].idTour,
                 code:discount[i].code,
                 discount:discount[i].discount,
+                startDiscount:discount[i].startDiscount,
+                endDiscount:discount[i].endDiscount,
                 status:discount[i].status,
                 nameTour:tour.name,
                 imageTour:tour.imagesTour[0]
