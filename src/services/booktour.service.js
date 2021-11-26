@@ -3,13 +3,15 @@ const BOOKTOUR = require("../models/BookTour.model");
 const TOUR = require("../models/Tour.model");
 const DISCOUNT = require('../models/Discount.model');
 const paypal = require("paypal-rest-sdk");
+const { CostExplorer } = require('aws-sdk');
 
 exports.bookTourAsync = async (body) => {
     try {
         var tour = await TOUR.findOne({ _id: body.idTour });
         var discount = await DISCOUNT.findOne({ code: body.codediscount, idTour: body.idTour });
         var bookTour;
-        if (body.codediscount == null   ) {
+        var today = new Date();
+        if (body.codediscount == null ) {
             bookTour = new BOOKTOUR({
                 idUser: body.idUser,
                 idTour: body.idTour,
@@ -20,9 +22,9 @@ exports.bookTourAsync = async (body) => {
             });
             await bookTour.save();
         }
-        else {
-
-            if (discount == null) {
+        else
+        {
+            if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
                 return {
                     message: "Code Discount doesn't exist",
                     success: false,
@@ -37,11 +39,8 @@ exports.bookTourAsync = async (body) => {
                 startDate: body.startDate,
                 endDate: body.endDate
             });
-
             await bookTour.save();
         }
-
-
         return {
             message: "Successfully Book Tour",
             success: true,
@@ -181,6 +180,8 @@ exports.getUserBookTourAsync = async (id, body) => {
                     idTour: listBookTour[i].idUser,
                     idUser: listBookTour[i].idTour,
                     finalpayment: listBookTour[i].finalpayment,
+                    startDate: listBookTour[i].startDate,
+                    endDate: listBookTour[i].endDate,
                 };
                 data.push(result);
             }
@@ -215,19 +216,3 @@ exports.getOneBookTourAsync = async (id) => {
         };
     }
 };
-
-function sortObject(obj) {
-	var sorted = {};
-	var str = [];
-	var key;
-	for (key in obj){
-		if (obj.hasOwnProperty(key)) {
-		str.push(encodeURIComponent(key));
-		}
-	}
-	str.sort();
-    for (key = 0; key < str.length; key++) {
-        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
-    }
-    return sorted;
-}

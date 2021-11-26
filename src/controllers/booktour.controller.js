@@ -162,9 +162,9 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
             message: "Successfully Create Payment!",
           });
       } else {
-
-        if (discount == null) {
-
+        var today = new Date();
+        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) 
+        {
           return controller.sendSuccess(
             res,
             null,
@@ -275,7 +275,9 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           }
         );
       } else {
-        if (discount == null) {
+        var today = new Date();
+        if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) 
+        {
           return controller.sendSuccess(
             res,
             null,
