@@ -213,6 +213,7 @@ exports.getUserBookTourAsync = async (id, body) => {
             for (let i = 0; i < listBookTour.length; i++) {
                 var tour = await TOUR.findOne({ _id: listBookTour[i].idTour });
                 var result = {
+                    _id:listBookTour[i]._id,
                     idEnterprise: tour.idEnterprise,
                     idVehicles: tour.idVehicles,
                     name: tour.name,
