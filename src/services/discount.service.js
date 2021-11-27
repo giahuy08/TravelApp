@@ -26,6 +26,7 @@ exports.getAllDiscountAsync = async () => {
         for(let i =0;i<discount.length;i++){
             var tour = await TOUR.findOne({ _id: discount[i].idTour });
             var data ={
+                _id:discount[i]._id,
                 idTour:discount[i].idTour,
                 code:discount[i].code,
                 discount:discount[i].discount,
