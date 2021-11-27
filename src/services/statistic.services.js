@@ -1,11 +1,13 @@
 const USER = require('../models/User.model');
 const TOUR = require('../models/Tour.model');
 const BOOKTOUR = require("../models/BookTour.model");
+const ENTERPRISE = require('../models/Enterprise.model');
 const { defaultCategoryTour, defaultBookTour } = require('../config/defineModel');
 
 exports.statisticByData = async () => {
     try {
         const listuser = await USER.countDocuments();
+        const listenterprise = await ENTERPRISE.countDocuments();
         const listtour = await TOUR.find();
         const listothers = await TOUR.countDocuments({ category: defaultCategoryTour.others });
         const listsea = await TOUR.countDocuments({ category: defaultCategoryTour.sea });
@@ -39,6 +41,7 @@ exports.statisticByData = async () => {
             user: listuser,
             tour: tour,
             booktour: booktour,
+            enterprise: listenterprise,
             statistictour: statistictour
         };
         return {

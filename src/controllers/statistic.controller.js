@@ -5,8 +5,6 @@ const { formatDateYYMMDD } = require("../helper");
 
 exports.statisticByData = async (req, res, next) => {
     try {
-        const { decodeToken } = req.value.body;
-        const id = decodeToken.data.id;
         const resServices = await statisticServices.statisticByData();
         if (resServices.success) {
             return controller.sendSuccess(
