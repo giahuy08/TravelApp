@@ -8,8 +8,7 @@ const jwtServices = require("../services/jwt.services")
 
 
 router.get('/getStatisticByData',  jwtServices.verify,checkRole([defaultRoles.Admin]), Controller.statisticByData)
-// router.get('/getStatisticByBookTour',  jwtServices.verify,checkRole([defaultRoles.Admin]), Controller.statisticByBookTour)
-// router.get('/getStatisticByTour',  jwtServices.verify,checkRole([defaultRoles.Admin]), Controller.statisticByTour)
+router.get('/getStatisticByBookTour',  jwtServices.verify,checkRole([defaultRoles.Admin]), Controller.statisticByBookTour)
 
 
 
