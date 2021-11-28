@@ -18,22 +18,33 @@ exports.statisticByData = async () => {
             sea: listsea,
             highland: listhighland
         }
-        const listbooktour = await BOOKTOUR.countDocuments();
+        const listbooktour = await BOOKTOUR.find().sort({ createdAt: -1 });
         const listCOMPLETE = await BOOKTOUR.countDocuments({ status: defaultBookTour.COMPLETE });
         const listAWAIT = await BOOKTOUR.countDocuments({ status: defaultBookTour.AWAIT });
         const listCANCEL = await BOOKTOUR.countDocuments({ status: defaultBookTour.CANCEL });
         var booktour = {
-            all: listbooktour,
+            all: listbooktour.length,
             complete: listCOMPLETE,
             await: listAWAIT,
             cancel: listCANCEL
+        }
+        var timelinebooktour = [];
+        for(let i = 0; i < listbooktour.length; i++)
+        {
+            var itemtour = await TOUR.findOne({ _id: listbooktour[i].idTour });
+            var result = {
+                booktour: listbooktour[i],
+                nameTour: itemtour.name
+            };
+            timelinebooktour.push(result);
         }
         var statistictour = [];
         for (let i = 0; i < listtour.length; i++) {
             var bt = await BOOKTOUR.countDocuments({ idTour: listtour[i]._id });
             var result = {
                 idtour: listtour[i]._id,
-                countbooktour: bt
+                countbooktour: bt,
+                nameTour:listtour[i].name
             };
             statistictour.push(result);
         }
@@ -52,7 +63,7 @@ exports.statisticByData = async () => {
             booktour: booktour,
             enterprise: listenterprise,
             statistictour: statistictour,
-            //placetour: placetour
+            listbooktour: timelinebooktour
         };
         return {
             message: 'Successfully Get Statistic Data',
