@@ -1,11 +1,13 @@
 const USER = require('../models/User.model');
 const TOUR = require('../models/Tour.model');
 const BOOKTOUR = require("../models/BookTour.model");
+const ENTERPRISE = require('../models/Enterprise.model');
 const { defaultCategoryTour, defaultBookTour } = require('../config/defineModel');
 
 exports.statisticByData = async () => {
     try {
         const listuser = await USER.countDocuments();
+        const listenterprise = await ENTERPRISE.countDocuments();
         const listtour = await TOUR.find();
         const listothers = await TOUR.countDocuments({ category: defaultCategoryTour.others });
         const listsea = await TOUR.countDocuments({ category: defaultCategoryTour.sea });
@@ -39,6 +41,7 @@ exports.statisticByData = async () => {
             user: listuser,
             tour: tour,
             booktour: booktour,
+            enterprise: listenterprise,
             statistictour: statistictour
         };
         return {
@@ -55,78 +58,41 @@ exports.statisticByData = async () => {
     }
 };
 
-// exports.staticByOrder = async body => {
-// 	try {
-// 		const { timeStart, timeEnd} = body;
-//     const currentTime = new Date(timeStart);
-//     const start = new Date(currentTime.getTime()-7*3600*1000);
-// 		let endTimeByDay = new Date(timeEnd).setHours(23, 59, 59, 999);
-// 		const end = new Date(new Date(endTimeByDay).getTime()-7*3600*1000);
-//     var listOrder = await ORDER.find({
-//       status: { $in: [0, 1, 2, 3] },
-// 			createdAt: {
-// 				$gte: start,
-// 				$lt: end
-// 			}
-//     });
-//     var totalMoney = 0 ;
-//     var totalOrder = listOrder.length ;
-//     listOrder.forEach(e => {
-//       totalMoney =  e.totalMoney + totalMoney;
-//     });
-// 		var result = {
-// 			totalOrder: totalOrder,
-// 			totalMoney: totalMoney
-// 		}
-// 		return {
-// 			message: 'Successfully Statistic By Time',
-// 			success: true,
-// 			data: result
-// 		};
-// 	} catch (err) {
-// 		console.log(err);
-// 		return {
-// 			error: 'Internal Server',
-// 			success: false
-// 		};
-// 	}
-// };
-// exports.staticByProduct = async body => {
-// 	try {
-// 		var listProduct = await PRODUCT.find().sort({sold:-1});
-// 		var arrayListProduct = [];
-// 		if(listProduct.length<5)
-// 		{
-// 			for(let i = 0; i < listProduct.length;i++)
-// 			{
-// 				var arrayImage = [];
-// 				image = await uploadServices.getImageS3(listProduct[i].image[0]);
-// 				arrayImage.push(image);
-// 				listProduct[i].image = arrayImage;
-// 				arrayListProduct.push(listProduct[i]);
-// 			}
-// 		}
-// 		else
-// 		{
-// 			for(let i = 0; i < 5;i++)
-// 			{
-// 				var arrayImage = [];
-// 				image = await uploadServices.getImageS3(listProduct[i].image[0]);
-// 				arrayImage.push(image);
-// 				listProduct[i].image = arrayImage;
-// 				arrayListProduct.push(listProduct[i]);
-// 			}
-// 		}
-// 		return {
-// 			message: 'Successfully Statistic By Time',
-// 			success: true,
-// 			data: arrayListProduct
-// 		};
-// 	} catch (err) {
-// 		console.log(err);
-// 		return {
-// 			error: 'Internal Server',
-// 			success: false
-// 		};
-// 	}
-// };
+exports.staticByBookTour = async body => {
+	try {
+		const { timeStart, timeEnd} = body;
+    const currentTime = new Date(timeStart);
+    const start = new Date(currentTime.getTime()-7*3600*1000);
+	let endTimeByDay = new Date(timeEnd).setHours(23, 59, 59, 999);
+	const end = new Date(new Date(endTimeByDay).getTime()-7*3600*1000);
+    var listBookTour = await BOOKTOUR.find({
+      status: { $in: [defaultBookTour.COMPLETE, defaultBookTour.AWAIT] },
+			createdAt: {
+				$gte: start,
+				$lt: end
+			}
+    });
+    console.log(listBookTour);
+    var totalMoney = 0 ;
+    var totalBookTour = listBookTour.length ;
+    listBookTour.forEach(e => {
+      totalMoney =  e.finalpayment + totalMoney;
+    });
+		var result = {
+			totalBookTour: totalBookTour,
+			totalMoney: totalMoney
+		}
+		return {
+			message: 'Successfully Statistic By Time',
+			success: true,
+			data: result
+		};
+	} catch (err) {
+		console.log(err);
+		return {
+			error: 'Internal Server',
+			success: false
+		};
+	}
+};
+
