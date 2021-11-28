@@ -33,16 +33,26 @@ exports.statisticByData = async () => {
             var bt = await BOOKTOUR.countDocuments({ idTour: listtour[i]._id });
             var result = {
                 idtour: listtour[i]._id,
-                countbooktour: bt.length
+                countbooktour: bt
             };
             statistictour.push(result);
         }
+        // var placetour = []
+        // for (let i = 0; i < listtour.length; i++) {
+        //     var place = await TOUR.countDocuments({ place: listtour[i].place });
+        //     var result = {
+        //         place: listtour[i].place,
+        //         count: place
+        //     };
+        //     placetour.push(result);
+        // }
         var result = {
             user: listuser,
             tour: tour,
             booktour: booktour,
             enterprise: listenterprise,
-            statistictour: statistictour
+            statistictour: statistictour,
+            //placetour: placetour
         };
         return {
             message: 'Successfully Get Statistic Data',
