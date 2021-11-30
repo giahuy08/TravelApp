@@ -24,15 +24,11 @@ exports.bookTourAsync = async (req, res, next) => {
     }
     var numbers = [];
     tour.time.replace(/(\d[\d\.]*)/g, function (x) { var n = Number(x); if (x == n) { numbers.push(x); } })
-    console.log(numbers);
     var maxInNumbers = Math.max.apply(Math, numbers);
-    console.log(maxInNumbers)
     var startDate = req.value.body.startDate;
     var endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + maxInNumbers);
     req.value.body.endDate = endDate;
-    console.log(startDate);
-    console.log(endDate);
     const booktour = await BOOKTOUR.findOne({
       idUser: userId,
       idTour: idTour,
