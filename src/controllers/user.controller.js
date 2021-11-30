@@ -12,7 +12,7 @@ exports.registerAsync = async (req, res, next) => {
 		var smtpTransport = await nodemailer.createTransport({
 			service: "gmail", //smtp.gmail.com  //in place of service use host...
 			secure: false, //true
-			port: 25, //465
+			port: 465, //465
 			auth: {
 				user: configEnv.Email,
 				pass: configEnv.Password
