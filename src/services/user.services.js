@@ -24,27 +24,42 @@ exports.registerUserAsync = async body => {
 			specialChars: false
 		});
 		const hashedPassword = await bcrypt.hash(password, 8);
-		const newUser = new USER({
-			email: email,
-			password: hashedPassword,
-			phone: phone,
-			name: name,
-			address: address,
-			otp: otp
-		});
-		await newUser.save();
-		const generateToken = await jwtServices.createToken({
-			id: newUser._id,
-			role: newUser.role
-		});
-		return {
-			message: 'Successfully Register',
-			success: true,
-			data: generateToken,
-			email: email,
-			otp: otp,
-			role: newUser.role
+		const mailOptions = {
+			to: email,
+			from: configEnv.Email,
+			subject: 'Đăng ký tài khoản Travel Around',
+			text: 'Mã OTP của bạn là: ' + otp
 		};
+
+		const resultSendMail = await sendMail(mailOptions);
+		if (!resultSendMail) {
+			return {
+				message: 'Send Email Failed',
+				success: false
+			};
+		} else {
+			const newUser = new USER({
+				email: email,
+				password: hashedPassword,
+				phone: phone,
+				name: name,
+				address: address,
+				otp: otp
+			});
+			await newUser.save();
+			const generateToken = await jwtServices.createToken({
+				id: newUser._id,
+				role: newUser.role
+			});
+			return {
+				message: 'Successfully Register',
+				success: true,
+				data: generateToken,
+				email: email,
+				otp: otp,
+				role: newUser.role
+			};
+		}
 	} catch (err) {
 		console.log(err);
 		return {
@@ -185,7 +200,7 @@ exports.loginAdminAsync = async body => {
 		const user = await USER.findOne({
 			email: email
 		});
-		if(user.role != defaultRoles.Admin) {
+		if (user.role != defaultRoles.Admin) {
 			return {
 				message: 'Verify Role Failed',
 				success: false
@@ -414,7 +429,7 @@ exports.verifyUser = async body => {
 
 		let user = await USER.findOne({ email: email });
 		if (user != null) {
-			if (otp == user.otp) {	
+			if (otp == user.otp) {
 				user.verify = true;
 				user.otp = '';
 				user.save();

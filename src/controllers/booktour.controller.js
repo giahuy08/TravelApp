@@ -150,13 +150,19 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         vnp_Params["vnp_SecureHash"] = signed;
         vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
-        res
-          .status(200)
-          .json({
-            code: "00",
-            data: vnpUrl,
-            message: "Successfully Create Payment!",
-          });
+        // res
+        //   .status(200)
+        //   .json({
+        //     code: "00",
+        //     data: vnpUrl,
+        //     message: "Successfully Create Payment!",
+        //   });
+        return controller.sendSuccess(
+          res,
+          vnpUrl,
+          200,
+          'Successfully Create Payment!'
+        );
       } else {
         var today = new Date();
         if (discount == null || new Date(discount.startDiscount) > new Date(today) || new Date(today) > new Date(discount.endDiscount)) {
@@ -226,13 +232,20 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
             .digest("hex");
           vnp_Params["vnp_SecureHash"] = signed;
           vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
-          res
-            .status(200)
-            .json({
-              code: "00",
-              data: vnpUrl,
-              message: "Successfully Create Payment!",
-            });
+          //   res
+          //     .status(200)
+          //     .json({
+          //       code: "00",
+          //       data: vnpUrl,
+          //       message: "Successfully Create Payment!",
+          //     });
+          // }
+          return controller.sendSuccess(
+            res,
+            vnpUrl,
+            200,
+            'Successfully Create Payment!'
+          );
         }
       }
     } else if (req.value.body.typePayment == defaultPayment.PayPal) {
