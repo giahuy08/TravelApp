@@ -134,7 +134,8 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
         vnp_Params["vnp_OrderType"] = orderType;
         vnp_Params["vnp_Amount"] = amount * 100;
         vnp_Params["vnp_ReturnUrl"] = returnUrl;
-        vnp_Params["vnp_IpAddr"] = ipAddr;
+        //vnp_Params["vnp_IpAddr"] = ipAddr
+        vnp_Params["vnp_IpAddr"] = "%3A%3A1";
         vnp_Params["vnp_CreateDate"] = createDate;
         if (bankCode !== null && bankCode !== "") {
           vnp_Params["vnp_BankCode"] = bankCode;
@@ -215,7 +216,8 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
           vnp_Params["vnp_OrderType"] = orderType;
           vnp_Params["vnp_Amount"] = amount * 100;
           vnp_Params["vnp_ReturnUrl"] = returnUrl;
-          vnp_Params["vnp_IpAddr"] = ipAddr;
+          //vnp_Params["vnp_IpAddr"] = ipAddr
+          vnp_Params["vnp_IpAddr"] = "%3A%3A1";
           vnp_Params["vnp_CreateDate"] = createDate;
           if (bankCode !== null && bankCode !== "") {
             vnp_Params["vnp_BankCode"] = bankCode;
