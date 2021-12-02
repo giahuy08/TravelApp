@@ -94,6 +94,8 @@ exports.bookTourPaymentAsync = async (req, res, next) => {
     req.value.body.endDate = endDate;
 
     if (req.value.body.typePayment == defaultPayment.VNPay) {
+      startDate = new Date(startDate).toISOString().slice(0, 10);
+      endDate = new Date(endDate).toISOString().slice(0, 10);
       if (req.value.body.codediscount == "") {
         var finalpayment = tour.payment;
         var ipAddr =
