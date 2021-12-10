@@ -697,3 +697,37 @@ exports.getUserBookTourAsync = async (req, res, next) => {
     return controller.sendError(res);
   }
 };
+
+exports.getUserBookTourByDateAsync = async (req, res, next) => {
+  try {
+    let query = {
+      dateStart : req.query.dateStart || "",
+      dateEnd : req.query.dateEnd || "",
+    };
+    const { decodeToken } = req.value.body;
+    const userId = decodeToken.data.id;
+
+    const resServices = await bookTourServices.getUserBookTourByDateAsync(
+      userId,
+      query
+    );
+    if (resServices.success) {
+      return controller.sendSuccess(
+        res,
+        resServices.data,
+        200,
+        resServices.message
+      );
+    }
+    return controller.sendSuccess(
+      res,
+      resServices.data,
+      300,
+      resServices.message
+    );
+  } catch (error) {
+    // bug
+    console.log(error);
+    return controller.sendError(res);
+  }
+};
