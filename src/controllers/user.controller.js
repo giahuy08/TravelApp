@@ -5,10 +5,12 @@ const jwtServices = require('../services/jwt.services');
 const { configEnv } = require('../config/index');
 const nodemailer = require('nodemailer');
 const { UploadImage } = require("../services/uploadFirebase.service");
+const { sendMail } = require('../services/sendMail.service');
 
 exports.registerAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.registerUserAsync(req.value.body);
+<<<<<<< HEAD
 		
 		var smtpTransport = await nodemailer.createTransport({
 			service: "gmail", //smtp.gmail.com  //in place of service use host...
@@ -45,6 +47,23 @@ exports.registerAsync = async (req, res, next) => {
 				);
 			}
 		});
+=======
+		if (!resServices.success) {
+			return controller.sendSuccess(
+				res,
+				resServices.success,
+				300,
+				resServices.message
+			);
+		}
+>>>>>>> a09a9f90a376d84a569978d49af23a45bf6e0758
+
+		return controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
 
 	} catch (err) {
 		console.log(err);
@@ -52,50 +71,7 @@ exports.registerAsync = async (req, res, next) => {
 	}
 };
 
-exports.registerAdminAsync = async (req, res, next) => {
-	try {
-		const resServices = await userServices.registerAdminAsync(req.value.body);
-		var smtpTransport = await nodemailer.createTransport({
-			service: "gmail", //smtp.gmail.com  //in place of service use host...
-			secure: false, //true
-			port: 465, //465 //25
-			auth: {
-				user: configEnv.Email,
-				pass: configEnv.Password
-			},
-			tls: {
-				rejectUnauthorized: false,
-			},
-		});
-		const mailOptions = {
-			to: resServices.email,
-			from: configEnv.Email,
-			subject: 'Tài khoản Admin Travel Around',
-			text: 'Chào mừng bạn đã thành Admin ứng dụng du lịch Travel Around của chúng tôi!'
-		};
-		smtpTransport.sendMail(mailOptions, function (error, response) {
-			if (error) {
-				return controller.sendSuccess(
-					res,
-					resServices.data,
-					300,
-					resServices.message
-				);
-			} else {
-				controller.sendSuccess(
-					res,
-					resServices.data,
-					200,
-					resServices.message
-				);
-			}
-		});
-	} catch (err) {
-		console.log(err);
-		return controller.sendError(res);
-	}
-};
-
+<<<<<<< HEAD
 exports.loginwithGoogleAsync = async (req,res,next)=>{
 	try{
 		const resServices = await userServices.loginwithGoogleAsync(req.value.body);
@@ -111,6 +87,51 @@ exports.loginwithGoogleAsync = async (req,res,next)=>{
 		return controller.sendError(res);
 	}
 }
+=======
+// exports.registerAdminAsync = async (req, res, next) => {
+// 	try {
+// 		const resServices = await userServices.registerAdminAsync(req.value.body);
+// 		var smtpTransport = await nodemailer.createTransport({
+// 			service: "gmail", //smtp.gmail.com  //in place of service use host...
+// 			secure: false, //true
+// 			port: 465, //465 //25
+// 			auth: {
+// 				user: configEnv.Email,
+// 				pass: configEnv.Password
+// 			},
+// 			tls: {
+// 				rejectUnauthorized: false,
+// 			},
+// 		});
+// 		const mailOptions = {
+// 			to: resServices.email,
+// 			from: configEnv.Email,
+// 			subject: 'Tài khoản Admin Travel Around',
+// 			text: 'Chào mừng bạn đã thành Admin ứng dụng du lịch Travel Around của chúng tôi!'
+// 		};
+// 		smtpTransport.sendMail(mailOptions, function (error, response) {
+// 			if (error) {
+// 				return controller.sendSuccess(
+// 					res,
+// 					resServices.data,
+// 					300,
+// 					resServices.message
+// 				);
+// 			} else {
+// 				controller.sendSuccess(
+// 					res,
+// 					resServices.data,
+// 					200,
+// 					resServices.message
+// 				);
+// 			}
+// 		});
+// 	} catch (err) {
+// 		console.log(err);
+// 		return controller.sendError(res);
+// 	}
+// };
+>>>>>>> a09a9f90a376d84a569978d49af23a45bf6e0758
 
 exports.loginAsync = async (req, res, next) => {
 	try {
@@ -162,7 +183,7 @@ exports.forgotPasswordAsync = async (req, res, next) => {
 		}
 		return controller.sendSuccess(
 			res,
-			resServices.data,
+			resServices.success,
 			200,
 			resServices.message
 		);

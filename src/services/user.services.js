@@ -7,54 +7,66 @@ const { configEnv } = require("../config/index");
 const nodemailer = require("nodemailer");
 const { sendMail } = require("./sendMail.service");
 
-exports.registerUserAsync = async (body) => {
-  try {
-    const { email, password, phone, name, address } = body;
-    console.log(body);
-    //check if email is already in the database
-    const emailExist = await USER.findOne({
-      email: email,
-    });
-    if (emailExist)
-      return {
-        message: "Email already exists",
-        success: false,
-      };
-    var otp = await otpGenerator.generate(6, {
-      upperCase: false,
-      specialChars: false,
-    });
+exports.registerUserAsync = async body => {
+	try {
+		const { email, password, phone, name, address } = body;
+		//check if email is already in the database
+		const emailExist = await USER.findOne({
+			email: email
+		});
+		if (emailExist)
+			return {
+				message: 'Email already exists',
+				success: false
+			};
+		var otp = await otpGenerator.generate(6, {
+			upperCase: false,
+			specialChars: false
+		});
+		const hashedPassword = await bcrypt.hash(password, 8);
+		const mailOptions = {
+			to: email,
+			from: configEnv.Email,
+			subject: 'Đăng ký tài khoản Travel Around',
+			text: 'Mã OTP của bạn là: ' + otp
+		};
 
-    const hashedPassword = await bcrypt.hash(password, 8);
-    const newUser = new USER({
-      email: email,
-      password: hashedPassword,
-      phone: phone,
-      name: name,
-      address: address,
-      otp: otp,
-    });
-
-    await newUser.save();
-    const generateToken = await jwtServices.createToken({
-      id: newUser._id,
-      role: newUser.role,
-    });
-    return {
-      message: "Successfully Register",
-      success: true,
-      data: generateToken,
-      email: email,
-      otp: otp,
-      role: newUser.role,
-    };
-  } catch (err) {
-    console.log(err);
-    return {
-      error: "Internal Server",
-      success: false,
-    };
-  }
+		const resultSendMail = await sendMail(mailOptions);
+		if (!resultSendMail) {
+			return {
+				message: 'Send Email Failed',
+				success: false
+			};
+		} else {
+			const newUser = new USER({
+				email: email,
+				password: hashedPassword,
+				phone: phone,
+				name: name,
+				address: address,
+				otp: otp
+			});
+			await newUser.save();
+			const generateToken = await jwtServices.createToken({
+				id: newUser._id,
+				role: newUser.role
+			});
+			return {
+				message: 'Successfully Register',
+				success: true,
+				data: generateToken,
+				email: email,
+				otp: otp,
+				role: newUser.role
+			};
+		}
+	} catch (err) {
+		console.log(err);
+		return {
+			error: 'Internal Server',
+			success: false
+		};
+	}
 };
 
 exports.editProfileAsync = async (id, body) => {
@@ -238,43 +250,43 @@ exports.loginAsync = async (body) => {
   }
 };
 
-exports.loginAdminAsync = async (body) => {
-  try {
-    const { email, password } = body;
-    const user = await USER.findOne({
-      email: email,
-    });
-    if (user.role != defaultRoles.Admin) {
-      return {
-        message: "Verify Role Failed",
-        success: false,
-      };
-    }
-    if (!user) {
-      return {
-        message: "Invalid Email !!",
-        success: false,
-      };
-    }
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-      return {
-        message: "Invalid password !!",
-        success: false,
-      };
-    }
-    if (user.verify == false) {
-      return {
-        message: "Unverified Account !!",
-        success: false,
-      };
-    }
-    console.log(user);
-    const generateToken = jwtServices.createToken({
-      id: user._id,
-      role: user.role,
-    });
-    console.log(generateToken);
+exports.loginAdminAsync = async body => {
+	try {
+		const { email, password } = body;
+		const user = await USER.findOne({
+			email: email
+		});
+		if (user.role != defaultRoles.Admin) {
+			return {
+				message: 'Verify Role Failed',
+				success: false
+			};
+		}
+		if (!user) {
+			return {
+				message: 'Invalid Email !!',
+				success: false
+			};
+		}
+		const isPasswordMatch = await bcrypt.compare(password, user.password);
+		if (!isPasswordMatch) {
+			return {
+				message: 'Invalid password !!',
+				success: false
+			};
+		}
+		if (user.verify == false) {
+			return {
+				message: 'Unverified Account !!',
+				success: false
+			};
+		}
+		console.log(user);
+		const generateToken = jwtServices.createToken({
+			id: user._id,
+			role: user.role
+		});
+		console.log(generateToken);
 
     return {
       message: "Successfully login",
@@ -475,32 +487,32 @@ exports.verifyUser = async (body) => {
   try {
     const { otp, email } = body;
 
-    let user = await USER.findOne({ email: email });
-    if (user != null) {
-      if (otp == user.otp) {
-        user.verify = true;
-        user.otp = "";
-        user.save();
-        return {
-          message: "Account Verification Successful",
-          success: true,
-        };
-      } else {
-        return {
-          message: "OTP invalid",
-          success: false,
-        };
-      }
-    } else {
-      return {
-        message: "Do not Email",
-        success: false,
-      };
-    }
-  } catch (error) {
-    return {
-      message: "An error occurred",
-      success: false,
-    };
-  }
+		let user = await USER.findOne({ email: email });
+		if (user != null) {
+			if (otp == user.otp) {
+				user.verify = true;
+				user.otp = '';
+				user.save();
+				return {
+					message: 'Account Verification Successful',
+					success: true
+				};
+			} else {
+				return {
+					message: 'OTP invalid',
+					success: false
+				};
+			}
+		} else {
+			return {
+				message: 'Do not Email',
+				success: false
+			};
+		}
+	} catch (error) {
+		return {
+			message: 'An error occurred',
+			success: false
+		};
+	}
 };
