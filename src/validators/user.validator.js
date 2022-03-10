@@ -7,6 +7,10 @@ const schemas = {
 		name:joi.string().required(),
 		address:joi.string().required(),
 	}),
+	loginGoogle: joi.object().keys({
+		email: joi.string().required(),
+		name: joi.string().required()
+	}),
 	login: joi.object().keys({
 		email: joi.string().required(),
 		password: joi.string().required()

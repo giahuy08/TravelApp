@@ -22,6 +22,7 @@ var cpUpload = upload.fields([{ name: 'Avatar', maxCount: 100 }]);
 router.post('/login', Validate.body(SchemaValidateUser.login), Controller.loginAsync)
 router.post('/loginAdmin', Validate.body(SchemaValidateUser.login), Controller.loginAdminAsync)
 router.post('/register', Validate.body(SchemaValidateUser.register), Controller.registerAsync)
+router.post('/loginwithGoogle', Validate.body(SchemaValidateUser.loginGoogle),Controller.loginwithGoogleAsync)
 router.post('/registerAdmin', Validate.body(SchemaValidateUser.register), Controller.registerAdminAsync)
 router.post('/changePassword', jwtServices.verify, Validate.body(SchemaValidateUser.changePass), Controller.changePasswordAsync)
 router.get('/forgotPassword', Controller.forgotPasswordAsync)

@@ -9,10 +9,11 @@ const { UploadImage } = require("../services/uploadFirebase.service");
 exports.registerAsync = async (req, res, next) => {
 	try {
 		const resServices = await userServices.registerUserAsync(req.value.body);
+		
 		var smtpTransport = await nodemailer.createTransport({
 			service: "gmail", //smtp.gmail.com  //in place of service use host...
 			secure: false, //true
-			port: 465, //465 //25
+			port: 25, //465 //25
 			auth: {
 				user: configEnv.Email,
 				pass: configEnv.Password
@@ -94,6 +95,22 @@ exports.registerAdminAsync = async (req, res, next) => {
 		return controller.sendError(res);
 	}
 };
+
+exports.loginwithGoogleAsync = async (req,res,next)=>{
+	try{
+		const resServices = await userServices.loginwithGoogleAsync(req.value.body);
+		controller.sendSuccess(
+			res,
+			resServices.data,
+			200,
+			resServices.message
+		);
+	}
+	catch(err){
+		console.log(err);
+		return controller.sendError(res);
+	}
+}
 
 exports.loginAsync = async (req, res, next) => {
 	try {
